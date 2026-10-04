@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Progress – NutriBite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥗</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-bg">
+  <div id="chrome"></div>
+  <main class="container page">
+    <div class="page-head">
+      <h1>Your daily calorie intake</h1>
+      <p>Every scan is added to the day you ate it — Day 1, Day 2, Day 3 and on.</p>
+    </div>
+
+    <div class="sum-grid" id="summary"></div>
+
+    <div class="panel">
+      <h3 style="font-size:1.2rem;letter-spacing:-.02em;margin-bottom:6px">Last 7 days</h3>
+      <div class="chart" id="chart"></div>
+    </div>
+
+    <div class="toolbar">
+      <h2>All days</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <div class="goal-ctrl"><label for="goal">Daily goal</label><input type="number" id="goal" min="800" max="6000" step="50" /><button class="btn btn-dark btn-sm" id="saveGoal">Save</button></div>
+        <button class="btn btn-light btn-sm btn-danger" id="clearBtn">Clear history</button>
+      </div>
+    </div>
+    <div class="days" id="days"></div>
+  </main>
+
+  <script src="common.js"></script>
+  <script>NB.mountChrome("progress");</script>
+  <script src="progress.js"></script>
+</body>
+</html>

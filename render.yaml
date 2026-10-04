@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: nutribite
+    runtime: node
+    plan: free
+    buildCommand: echo "no build needed"
+    startCommand: node server.js
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODELS
+        value: google/gemini-2.5-flash,openai/gpt-4o-mini

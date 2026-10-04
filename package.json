@@ -1,0 +1,13 @@
+{
+  "name": "nutribite",
+  "version": "1.0.0",
+  "description": "AI food scanner – calories and nutrients from a photo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

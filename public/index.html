@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NutriBite – Scan food, know your calories</title>
+  <meta name="description" content="Scan any food with AI and instantly see calories, nutrients, advantages and disadvantages. Track your intake every day." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥗</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="chrome"></div>
+
+  <div class="hero-bg">
+    <div class="container hero">
+      <div class="hero-text reveal">
+        <h1>Reimagine eating,<br />simple nutrition.</h1>
+        <p class="lead">Point your camera at any meal. NutriBite's AI instantly shows calories, nutrients, advantages and disadvantages — and tracks your intake day by day.</p>
+        <div class="hero-cta">
+          <a href="scan.html" class="btn btn-dark">📷 Scan Your Food</a>
+          <a href="progress.html" class="btn btn-light">My Progress →</a>
+        </div>
+        <div class="social">
+          <div class="avatars"><span>🥑</span><span>🍓</span><span>🥦</span></div>
+          <div><strong>~5 sec</strong><small>from photo to full nutrition</small></div>
+        </div>
+      </div>
+
+      <div class="phone-stage reveal">
+        <div class="phone"><div class="screen">
+          <h6>Calories today</h6>
+          <div class="big">1,842 <small>kcal · Day 4</small></div>
+          <svg class="chart" viewBox="0 0 260 100" preserveAspectRatio="none">
+            <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22c55e" stop-opacity=".28"/><stop offset="1" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0 70 C30 60 45 20 80 40 S130 90 160 55 S215 20 260 30 V100 H0Z" fill="url(#cg)"/>
+            <path d="M0 70 C30 60 45 20 80 40 S130 90 160 55 S215 20 260 30" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="80" cy="40" r="5" fill="#fff" stroke="#ef4444" stroke-width="2.5"/>
+          </svg>
+          <div class="list-title">Today's meals</div>
+          <div class="tx"><div class="ic">🍳</div><div><strong>Veg Omelette</strong><small>Breakfast · 8:20 AM</small></div><span class="amt">320</span></div>
+          <div class="tx"><div class="ic">🥗</div><div><strong>Chicken Bowl</strong><small>Lunch · 1:05 PM</small></div><span class="amt">540</span></div>
+          <div class="tx"><div class="ic">🍎</div><div><strong>Apple &amp; Nuts</strong><small>Snack · 4:30 PM</small></div><span class="amt">210</span></div>
+          <div class="tx"><div class="ic">🍝</div><div><strong>Pasta</strong><small>Dinner · 8:10 PM</small></div><span class="amt">770</span></div>
+        </div></div>
+        <div class="fcard a">Daily total<strong>1,842 kcal</strong></div>
+        <div class="fcard b">Goal progress<div class="pbar"><i></i></div><strong>68% of 2,700</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip"><div class="container strip-inner">
+    <span>🔥 Calories</span><span>💪 Protein</span><span>🌾 Carbs</span><span>🥑 Fats</span><span>🥦 Fiber</span><span>🍊 Vitamins</span><span>🧂 Minerals</span>
+  </div></div>
+
+  <section>
+    <div class="container">
+      <h2 class="sec-title reveal">Everything you need to understand<br />your food and more</h2>
+      <div class="cards3">
+        <a href="scan.html" class="fcard-big reveal"><div class="ic">⚡</div><div><h4>Scan in seconds</h4><p>Use your live camera, or upload a photo when the scanner isn't available. Results open in a new page.</p></div></a>
+        <a href="scan.html" class="fcard-big reveal"><div class="ic">⚖️</div><div><h4>Advantages &amp; disadvantages</h4><p>Know what's good and what to watch out for in every meal, with calories and 12+ nutrients.</p></div></a>
+        <a href="progress.html" class="fcard-big reveal"><div class="ic">📅</div><div><h4>Day-by-day tracking</h4><p>Day 1, Day 2, Day 3… and on. Your calorie intake is logged for every single day automatically.</p></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-wrap">
+    <div class="container stats">
+      <div>
+        <div class="stat reveal"><small>Nutrients per scan</small><strong>12+</strong><p>Calories, macros, fiber, sugar, vitamins and minerals for the portion you're holding.</p></div>
+        <div class="stat reveal"><small>Analysis time</small><strong>~5s</strong><p>Our vision AI identifies each item and estimates the portion size instantly.</p></div>
+        <div class="stat reveal"><small>Days you can track</small><strong>Unlimited</strong><p>Not a challenge, just a daily habit. Keep going for as long as you like.</p></div>
+      </div>
+      <div class="stats-photo reveal">
+        <img src="hero.jpg" alt="Person holding a healthy salad bowl" />
+        <div class="donut-card"><div class="donut"></div>
+          <div class="donut-legend"><span style="--c:var(--protein)">Protein 30%</span><span style="--c:var(--carbs)">Carbs 42%</span><span style="--c:var(--fat)">Fat 28%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container faq">
+      <div class="faq-photo reveal"><img src="faq.jpg" alt="Friends enjoying healthy meals" />
+        <div class="badge-float">Daily average intake<strong>1,960 kcal</strong></div></div>
+      <div class="reveal">
+        <div class="faq-head"><h2>Track every meal and<br />learn what you eat</h2><a href="scan.html" class="btn btn-light btn-sm">Start scanning →</a></div>
+        <div id="faq">
+          <div class="q open"><button><span class="n">01.</span>How does NutriBite know the calories?</button><div class="a">An AI vision model looks at your photo, identifies the food and estimates the portion, then calculates calories and nutrients.</div></div>
+          <div class="q"><button><span class="n">02.</span>What if the camera scanner isn't working?</button><div class="a">Open Scan Food and switch to Upload Photo. On a phone it lets you take a picture or choose one from your gallery.</div></div>
+          <div class="q"><button><span class="n">03.</span>How are my days tracked?</button><div class="a">Day 1 starts on your first scan. Every new calendar day becomes Day 2, Day 3, Day 4 and so on, with its own calorie total.</div></div>
+          <div class="q"><button><span class="n">04.</span>Is my data private?</button><div class="a">Your history is stored only in your own browser on this device. Photos are sent to the AI only to analyze them.</div></div>
+          <div class="q"><button><span class="n">05.</span>How accurate are the results?</button><div class="a">They're estimates, best with good light and a clear top-down photo. They aren't medical advice.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container"><div class="cta reveal">
+      <h2>Ready to see what's on your plate?</h2><p>Scan your next meal and add it to today's total.</p>
+      <a href="scan.html" class="btn btn-green">📷 Scan Food Now</a>
+    </div></div>
+  </section>
+
+  <footer><div class="container">
+    <a href="index.html" class="logo"><span class="logo-mark">🥗</span>NutriBite</a>
+    <span>AI estimates are approximate and not medical advice. © 2026 NutriBite</span>
+  </div></footer>
+
+  <script src="common.js"></script>
+  <script>
+    NB.mountChrome("home");
+    document.querySelectorAll("#faq .q button").forEach((b) => b.addEventListener("click", () => {
+      const q = b.parentElement, was = q.classList.contains("open");
+      document.querySelectorAll("#faq .q").forEach((x) => x.classList.remove("open"));
+      if (!was) q.classList.add("open");
+    }));
+  </script>
+</body>
+</html>

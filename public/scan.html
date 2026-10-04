@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scan Food – NutriBite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥗</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-bg">
+  <div id="chrome"></div>
+
+  <main class="container page">
+    <div class="page-head">
+      <h1>Scan your food</h1>
+      <p>Use your camera for a live scan. If the scanner isn't working, upload a photo instead.</p>
+    </div>
+
+    <div class="scan-grid">
+      <div class="panel">
+        <div class="seg">
+          <button class="active" data-tab="camera">📷 Camera Scan</button>
+          <button data-tab="upload">🖼️ Upload Photo</button>
+        </div>
+
+        <div id="cameraPane">
+          <div class="viewport">
+            <video id="video" playsinline autoplay muted hidden></video>
+            <div class="corners"><span></span><span></span><span></span><span></span></div>
+            <div class="scan-line" id="liveLine" hidden></div>
+            <div class="viewport-msg" id="camMsg"></div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-light btn-sm" id="flipCam" disabled>🔄 Flip</button>
+            <button class="shutter" id="capture" aria-label="Capture and analyze" disabled></button>
+            <button class="btn btn-light btn-sm" id="stopCam" disabled>⏹ Stop</button>
+          </div>
+        </div>
+
+        <div id="uploadPane" hidden>
+          <label class="dropzone" id="dropzone">
+            <input type="file" id="fileInput" accept="image/*" hidden />
+            <div>
+              <div class="icon">📤</div>
+              <h3>Drop your food photo here</h3>
+              <p>or click to browse · JPG, PNG, WEBP</p>
+              <span class="btn btn-dark btn-sm">Choose Image</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <aside class="soft-panel">
+        <h3 style="font-size:1.3rem;letter-spacing:-.02em">How it works</h3>
+        <ul class="steps">
+          <li><span class="num">1</span><div><strong>Capture</strong><p>Scan with your camera or upload a clear photo.</p></div></li>
+          <li><span class="num">2</span><div><strong>AI analysis</strong><p>Items and portion size are identified automatically.</p></div></li>
+          <li><span class="num">3</span><div><strong>Full breakdown</strong><p>Calories, nutrients, advantages and disadvantages.</p></div></li>
+          <li><span class="num">4</span><div><strong>Daily log</strong><p>Added to today's total in My Progress.</p></div></li>
+        </ul>
+        <div class="tip">💡 Good lighting and a top-down angle give the most accurate results.</div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="loading" id="loading">
+    <div class="loading-box"><div class="loader-ring"></div><h3>Analyzing your food…</h3><p id="loadingText">Identifying ingredients</p></div>
+  </div>
+
+  <canvas id="canvas" hidden></canvas>
+  <script src="common.js"></script>
+  <script>NB.mountChrome("scan");</script>
+  <script src="scan.js"></script>
+</body>
+</html>
