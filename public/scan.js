@@ -83,8 +83,8 @@
     const timer = setInterval(() => { i = Math.min(i + 1, steps.length - 1); loadingText.textContent = steps[i]; }, 1600);
     try {
       const res = await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ image }) });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Analysis failed");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Server error (${res.status})`);
       if (data.isFood === false) throw new Error(data.message || "No food detected. Try another photo.");
       const entry = NB.addEntry(data);
       NB.saveResult({ ...data, image, day: entry.day, entryId: entry.id, scannedAt: entry.ts });
@@ -93,6 +93,7 @@
       console.error(err);
       NB.toast(`⚠️ ${err.message}`, "error");
       loading.classList.remove("show");
+      if (!stream) idle();
     } finally { clearInterval(timer); }
   }
 

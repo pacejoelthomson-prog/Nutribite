@@ -111,16 +111,41 @@ async function analyze(imageDataUrl) {
   throw lastErr || new Error("All models failed");
 }
 
+// --- Simple per-IP rate limit so a public link can't drain your OpenRouter credits ---
+const RATE_LIMIT = Number(process.env.RATE_LIMIT) || 40; // scans per hour per IP
+const hits = new Map();
+function rateLimited(req) {
+  const ip = (req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim();
+  const now = Date.now();
+  const recent = (hits.get(ip) || []).filter((t) => now - t < 3600000);
+  recent.push(now);
+  hits.set(ip, recent);
+  if (hits.size > 5000) for (const [k, v] of hits) if (!v.some((t) => now - t < 3600000)) hits.delete(k);
+  return recent.length > RATE_LIMIT;
+}
+
 const server = http.createServer(async (req, res) => {
   try {
+    if (req.url === "/healthz") return send(res, 200, "ok", "text/plain");
+
     if (req.method === "POST" && req.url === "/api/analyze") {
-      if (!API_KEY) return send(res, 500, { error: "OPENROUTER_API_KEY is not set in .env" });
-      const { image } = JSON.parse(await readBody(req));
+      if (!API_KEY) return send(res, 500, { error: "OPENROUTER_API_KEY is not set on the server." });
+      if (rateLimited(req)) return send(res, 429, { error: "Too many scans. Please try again in a while." });
+      let image;
+      try {
+        ({ image } = JSON.parse(await readBody(req)));
+      } catch (e) {
+        const tooBig = /too large/i.test(e.message);
+        return send(res, tooBig ? 413 : 400, { error: tooBig ? e.message : "Invalid request." });
+      }
       if (!image || !/^data:image\/(png|jpe?g|webp|gif);base64,/.test(image)) {
         return send(res, 400, { error: "Please provide a valid image." });
       }
-      const result = await analyze(image);
-      return send(res, 200, result);
+      try {
+        return send(res, 200, await analyze(image));
+      } catch (e) {
+        return send(res, 502, { error: `AI analysis failed: ${e.message}` });
+      }
     }
 
     if (req.method !== "GET") return send(res, 405, { error: "Method not allowed" });
@@ -129,14 +154,14 @@ const server = http.createServer(async (req, res) => {
     let urlPath = decodeURIComponent(req.url.split("?")[0]);
     if (urlPath === "/") urlPath = "/index.html";
     const filePath = path.normalize(path.join(PUBLIC_DIR, urlPath));
-    if (!filePath.startsWith(PUBLIC_DIR)) return send(res, 403, "Forbidden", "text/plain");
+    if (filePath !== PUBLIC_DIR && !filePath.startsWith(PUBLIC_DIR + path.sep)) return send(res, 403, "Forbidden", "text/plain");
     fs.readFile(filePath, (err, buf) => {
       if (err) return send(res, 404, "Not found", "text/plain");
       send(res, 200, buf, MIME[path.extname(filePath)] || "application/octet-stream");
     });
   } catch (e) {
     console.error(e);
-    send(res, 500, { error: e.message || "Server error" });
+    if (!res.headersSent) send(res, 500, { error: e.message || "Server error" });
   }
 });
 

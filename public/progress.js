@@ -31,12 +31,12 @@
     const first = Math.max(1, cur - 6), range = [];
     for (let d = first; d <= cur; d++) range.push(d);
     const max = Math.max(goal * 1.15, ...range.map((d) => NB.dayTotals(d).calories));
-    $("#chart").innerHTML = `<div class="goal-line" style="bottom:calc(${(goal / max) * 100}% * .82 + 24px)"><span>Goal ${goal}</span></div>` +
+    $("#chart").innerHTML = `<div class="plot"><div class="goal-line" style="bottom:${(goal / max) * 100}%"><span>Goal ${goal}</span></div>` +
       range.map((d) => {
         const c = NB.dayTotals(d).calories;
-        return `<div class="col" data-day="${d}" title="Day ${d}: ${c} kcal"><span class="v">${c || ""}</span>
-          <div class="b ${c > goal ? "over" : ""}" data-h="${(c / max) * 82}"></div><small>Day ${d}</small></div>`;
-      }).join("");
+        return `<div class="col" data-day="${d}" title="Day ${d}: ${c} kcal">
+          <div class="b ${c > goal ? "over" : ""}" data-h="${(c / max) * 100}">${c ? `<span class="v">${c}</span>` : ""}</div></div>`;
+      }).join("") + `</div><div class="labels">${range.map((d) => `<small>Day ${d}</small>`).join("")}</div>`;
     requestAnimationFrame(() => setTimeout(() => document.querySelectorAll(".chart .b").forEach((b) => (b.style.height = b.dataset.h + "%")), 60));
     document.querySelectorAll(".chart .col").forEach((c) => c.addEventListener("click", () => {
       const card = document.getElementById(`day${c.dataset.day}`);

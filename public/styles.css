@@ -38,8 +38,10 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .powered-bar b { color: #86efac; }
 
 /* ---------- Glass menu bar (Apple style) ---------- */
+#chrome { display: contents; } /* lets the sticky nav follow the whole page, not just the wrapper */
 .nav-wrap { position: sticky; top: 14px; z-index: 60; margin-top: 14px; height: 0; }
 .nav {
+  position: relative;
   width: min(880px, 92%); margin: 0 auto; height: 58px; padding: 0 10px 0 20px;
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
   border-radius: 999px;
@@ -303,15 +305,17 @@ footer .container { display: flex; justify-content: space-between; align-items: 
 .sum strong { font-size: 2.2rem; letter-spacing: -.04em; line-height: 1.15; display: block; }
 .sum span { font-size: .8rem; color: var(--muted); }
 .sum.dark { background: var(--ink); color: #fff; } .sum.dark small, .sum.dark span { color: #a8afbc; }
-.chart { display: flex; align-items: flex-end; gap: 12px; height: 200px; padding-top: 14px; position: relative; }
+.chart { position: relative; padding-top: 28px; }
+.chart .plot { position: relative; display: flex; gap: 12px; height: 170px; border-bottom: 1px solid var(--line); }
 .chart .goal-line { position: absolute; left: 0; right: 0; border-top: 2px dashed #86efac; z-index: 0; }
 .chart .goal-line span { position: absolute; right: 0; top: -22px; font-size: .74rem; color: var(--green); font-weight: 700; background: #fff; padding: 0 4px; }
-.chart .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; gap: 6px; z-index: 1; cursor: pointer; }
+.chart .col { flex: 1; position: relative; display: flex; align-items: flex-end; justify-content: center; z-index: 1; cursor: pointer; }
 .chart .col .b { width: 100%; max-width: 54px; border-radius: 14px 14px 6px 6px; background: linear-gradient(180deg, #86efac, #22c55e); height: 0; transition: height 1s cubic-bezier(.2, .8, .2, 1); position: relative; }
 .chart .col .b.over { background: linear-gradient(180deg, #fca5a5, #ef4444); }
 .chart .col:hover .b { filter: brightness(1.08); }
-.chart .col small { font-size: .74rem; color: var(--muted); font-weight: 700; }
-.chart .col .v { font-size: .72rem; font-weight: 700; }
+.chart .col .v { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 4px; font-size: .72rem; font-weight: 700; white-space: nowrap; }
+.chart .labels { display: flex; gap: 12px; margin-top: 8px; }
+.chart .labels small { flex: 1; text-align: center; font-size: .74rem; color: var(--muted); font-weight: 700; }
 .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; margin: 28px 0 16px; }
 .toolbar h2 { font-size: 1.6rem; letter-spacing: -.03em; }
 .goal-ctrl { display: flex; align-items: center; gap: 8px; background: var(--soft); padding: 5px 5px 5px 16px; border-radius: 999px; font-size: .9rem; color: var(--muted); font-weight: 600; }
