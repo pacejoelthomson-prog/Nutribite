@@ -88,7 +88,7 @@ async function analyze(imageDataUrl) {
         body: JSON.stringify({
           model,
           temperature: 0.2,
-          max_tokens: 1200,
+          max_tokens: 1000,
           messages: [{
             role: "user",
             content: [
