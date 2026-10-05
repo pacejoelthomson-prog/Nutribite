@@ -100,6 +100,30 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: end; padding: 120px 0 0; min-height: 640px; }
 .hero-text { padding-bottom: 80px; }
 .hero h1 { font-size: clamp(2.6rem, 5.4vw, 4.3rem); line-height: 1.04; letter-spacing: -.04em; font-weight: 700; }
+.typewriter-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  position: relative;
+  vertical-align: bottom;
+}
+.typewriter-text {
+  color: var(--ink);
+}
+.typewriter-cursor {
+  display: inline-block;
+  width: 4px;
+  height: 0.82em;
+  background: var(--green);
+  margin-left: 5px;
+  border-radius: 2px;
+  vertical-align: -0.04em;
+  animation: typewriter-blink 0.85s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes typewriter-blink {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100% { opacity: 1; }
+}
 .hero p.lead { color: #3f4755; font-size: 1.08rem; margin: 20px 0 30px; max-width: 480px; }
 .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
 .social { display: flex; align-items: center; gap: 14px; margin-top: 44px; }
@@ -763,6 +787,9 @@ html.js .reveal-card.in .showcase-visual {
   .block-desc {
     font-size: 0.96rem;
   }
+  .hero h1 {
+    font-size: clamp(2.1rem, 7.6vw, 2.9rem);
+  }
 }
 
 /* FIX: respect users who prefer less motion */
@@ -773,5 +800,5 @@ html.js .reveal-card.in .showcase-visual {
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
-  .fcard, .scan-line, .loader-ring, .loader-ring::after { animation: none !important; }
+  .fcard, .scan-line, .loader-ring, .loader-ring::after, .typewriter-cursor { animation: none !important; }
 }

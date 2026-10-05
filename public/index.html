@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="styles.css" />
   <script>document.documentElement.classList.add('js');</script>
   <!-- If JavaScript is disabled, never leave content hidden -->
-  <noscript><style>.reveal,.reveal-card{opacity:1!important;transform:none!important}</style></noscript>
+  <noscript><style>.reveal,.reveal-card{opacity:1!important;transform:none!important}.typewriter-cursor{display:none!important;}</style></noscript>
 </head>
 <body>
   <div id="chrome"></div>
@@ -19,7 +19,7 @@
   <div class="hero-bg">
     <div class="container hero">
       <div class="hero-text reveal">
-        <h1>Reimagine eating,<br />simple nutrition.</h1>
+        <h1>Reimagine eating,<br /><span class="typewriter-wrap"><span class="typewriter-text" id="typewriter">simple nutrition.</span><span class="typewriter-cursor" aria-hidden="true"></span></span></h1>
         <p class="lead">Point your camera at any meal. NutriBite's AI instantly shows calories, nutrients, advantages and disadvantages — and tracks your intake day by day.</p>
         <div class="hero-cta">
           <a href="scan.html" class="btn btn-dark">📷 Scan Your Food</a>
@@ -279,6 +279,22 @@
       window.addEventListener("resize", onScroll);
       move();
     }
+
+    /* Typewriter effect for "simple nutrition." */
+    (function () {
+      const tw = document.getElementById("typewriter");
+      if (!tw) return;
+      const targetText = "simple nutrition.";
+      tw.textContent = "";
+      let i = 0;
+      setTimeout(() => {
+        const timer = setInterval(() => {
+          tw.textContent = targetText.slice(0, i + 1);
+          i++;
+          if (i >= targetText.length) clearInterval(timer);
+        }, 85);
+      }, 320);
+    })();
   </script>
 </body>
 </html>
