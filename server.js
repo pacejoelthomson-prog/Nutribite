@@ -169,6 +169,6 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`\n🍽️  NutriBite running at http://localhost:${PORT}\n`);
 });
