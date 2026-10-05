@@ -119,9 +119,10 @@ const NB = (() => {
     addEventListener("scroll", onScroll, { passive: true }); onScroll();
   }
 
+  document.documentElement.classList.add('js');
   document.addEventListener("DOMContentLoaded", () => {
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    document.querySelectorAll(".reveal, .reveal-card").forEach((el) => io.observe(el));
   });
 
   return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome };

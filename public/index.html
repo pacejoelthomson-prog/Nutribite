@@ -9,6 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥗</text></svg>" />
   <link rel="stylesheet" href="styles.css" />
+  <script>document.documentElement.classList.add('js');</script>
+  <!-- If JavaScript is disabled, never leave content hidden -->
+  <noscript><style>.reveal,.reveal-card{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
   <div id="chrome"></div>
@@ -54,14 +57,83 @@
     <span>🔥 Calories</span><span>💪 Protein</span><span>🌾 Carbs</span><span>🥑 Fats</span><span>🥦 Fiber</span><span>🍊 Vitamins</span><span>🧂 Minerals</span>
   </div></div>
 
-  <section>
+  <!-- ============ BIG IMPACT SCROLL-ANIMATED SHOWCASE BLOCKS ============ -->
+  <section class="showcase-section" id="showcase">
     <div class="container">
-      <h2 class="sec-title reveal">Everything you need to understand<br />your food and more</h2>
-      <div class="cards3">
-        <a href="scan.html" class="fcard-big reveal"><div class="ic">⚡</div><div><h4>Scan in seconds</h4><p>Use your live camera, or upload a photo when the scanner isn't available. Results open in a new page.</p></div></a>
-        <a href="scan.html" class="fcard-big reveal"><div class="ic">⚖️</div><div><h4>Advantages &amp; disadvantages</h4><p>Know what's good and what to watch out for in every meal, with calories and 12+ nutrients.</p></div></a>
-        <a href="progress.html" class="fcard-big reveal"><div class="ic">📅</div><div><h4>Day-by-day tracking</h4><p>Day 1, Day 2, Day 3… and on. Your calorie intake is logged for every single day automatically.</p></div></a>
+      <div class="showcase-header reveal">
+        <span class="showcase-pill"><span class="pill-dot"></span> Next-Gen Nutrition AI</span>
+        <h2 class="sec-title">Everything you need to understand<br />your food and more</h2>
+        <p class="sec-subtitle">Experience instant food detection, transparent pros &amp; cons, and continuous daily calorie tracking—all powered by modern AI vision in the palm of your hand.</p>
       </div>
+
+      <!-- BLOCK 1: SCAN IN SECONDS (Image 1) -->
+      <article class="showcase-card showcase-block-1 reveal-card" data-block="1">
+        <div class="showcase-inner">
+          <div class="showcase-copy">
+            <span class="block-tag tag-green"><span class="tag-icon">⚡</span> 01 · Instant Detection</span>
+            <h3>Scan in seconds</h3>
+            <p class="block-desc">Point your phone camera at any plate. Our vision AI instantly isolates every item on your plate, calculates the portion size, and returns total calories, macros, and nutrients before your food gets cold.</p>
+            <ul class="block-points">
+              <li><span class="point-check check-green">✓</span> Real-time camera viewfinder with smart auto-framing</li>
+              <li><span class="point-check check-green">✓</span> Quick photo upload fallback whenever camera isn't available</li>
+              <li><span class="point-check check-green">✓</span> Full calories, macros &amp; micronutrients tracked in ~5s</li>
+            </ul>
+            <a href="scan.html" class="btn btn-dark block-btn">📷 Scan Your Food Now →</a>
+          </div>
+          <div class="showcase-visual">
+            <span class="showcase-glow glow-green" aria-hidden="true"></span>
+            <div class="showcase-frame" data-parallax="26">
+              <img src="showcase-scan.jpg" alt="Hand holding phone scanning grilled chicken with quinoa and vegetables, displaying food detected nutritional panel" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- BLOCK 2: ADVANTAGES & DISADVANTAGES (Image 2, Reversed) -->
+      <article class="showcase-card showcase-block-2 reveal-card reverse" data-block="2">
+        <div class="showcase-inner">
+          <div class="showcase-copy">
+            <span class="block-tag tag-dual"><span class="tag-icon">⚖️</span> 02 · Honest Feedback</span>
+            <h3>Advantages &amp; disadvantages</h3>
+            <p class="block-desc">Nutrition isn't one-sided. Every scan generates an honest, unbiased breakdown of the pros and cons of your meal—celebrating lean protein and vitamins while flagging hidden sodium, heavy oils, or excess sugars.</p>
+            <ul class="block-points">
+              <li><span class="point-check check-dual">✓</span> Clear health advantages: fiber, protein density &amp; vitality</li>
+              <li><span class="point-check check-dual">✓</span> Mindful watchouts: sodium peaks, dressing oils &amp; high calories</li>
+              <li><span class="point-check check-dual">✓</span> Actionable dietitian tips tailored to your specific portion</li>
+            </ul>
+            <a href="scan.html" class="btn btn-dark block-btn">⚖️ See Pros &amp; Cons on Your Food →</a>
+          </div>
+          <div class="showcase-visual">
+            <span class="showcase-glow glow-dual" aria-hidden="true"></span>
+            <div class="showcase-frame" data-parallax="-26">
+              <img src="showcase-proscons.jpg" alt="Smartphone displaying chicken salad scan with green advantages and red disadvantages panels" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- BLOCK 3: DAY TO DAY PROGRESS (Image 3) -->
+      <article class="showcase-card showcase-block-3 reveal-card" data-block="3">
+        <div class="showcase-inner">
+          <div class="showcase-copy">
+            <span class="block-tag tag-blue"><span class="tag-icon">📅</span> 03 · Lifelong Tracking</span>
+            <h3>Day to day progress</h3>
+            <p class="block-desc">NutriBite isn't a temporary 3-day challenge. It's built for your daily life. Every food you scan is automatically attributed to Day 1, Day 2, Day 3, Day 4, and beyond—with visual goal rings and weekly bar charts.</p>
+            <ul class="block-points">
+              <li><span class="point-check check-blue">✓</span> Continuous Day 1, Day 2, Day 3… logging without reset</li>
+              <li><span class="point-check check-blue">✓</span> Custom daily calorie targets with visual progress rings</li>
+              <li><span class="point-check check-blue">✓</span> Interactive 7-day bar chart with your target goal line</li>
+            </ul>
+            <a href="progress.html" class="btn btn-dark block-btn">📅 View Your Daily Progress →</a>
+          </div>
+          <div class="showcase-visual">
+            <span class="showcase-glow glow-blue" aria-hidden="true"></span>
+            <div class="showcase-frame" data-parallax="28">
+              <img src="showcase-progress.png" alt="Smartphone on table showing Day 1 and Day 2 calorie rings with daily progress weekly overview" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -88,11 +160,26 @@
       <div class="reveal">
         <div class="faq-head"><h2>Track every meal and<br />learn what you eat</h2><a href="scan.html" class="btn btn-light btn-sm">Start scanning →</a></div>
         <div id="faq">
-          <div class="q open"><button><span class="n">01.</span>How does NutriBite know the calories?</button><div class="a">An AI vision model looks at your photo, identifies the food and estimates the portion, then calculates calories and nutrients.</div></div>
-          <div class="q"><button><span class="n">02.</span>What if the camera scanner isn't working?</button><div class="a">Open Scan Food and switch to Upload Photo. On a phone it lets you take a picture or choose one from your gallery.</div></div>
-          <div class="q"><button><span class="n">03.</span>How are my days tracked?</button><div class="a">Day 1 starts on your first scan. Every new calendar day becomes Day 2, Day 3, Day 4 and so on, with its own calorie total.</div></div>
-          <div class="q"><button><span class="n">04.</span>Is my data private?</button><div class="a">Your history is stored only in your own browser on this device. Photos are sent to the AI only to analyze them.</div></div>
-          <div class="q"><button><span class="n">05.</span>How accurate are the results?</button><div class="a">They're estimates, best with good light and a clear top-down photo. They aren't medical advice.</div></div>
+          <div class="q open">
+            <button aria-expanded="true"><span class="n">01.</span>How does NutriBite know the calories?</button>
+            <div class="a"><div>An AI vision model looks at your photo, identifies the food and estimates the portion, then calculates calories and nutrients.</div></div>
+          </div>
+          <div class="q">
+            <button aria-expanded="false"><span class="n">02.</span>What if the camera scanner isn't working?</button>
+            <div class="a"><div>Open Scan Food and switch to Upload Photo. On a phone it lets you take a picture or choose one from your gallery.</div></div>
+          </div>
+          <div class="q">
+            <button aria-expanded="false"><span class="n">03.</span>How are my days tracked?</button>
+            <div class="a"><div>Day 1 starts on your first scan. Every new calendar day becomes Day 2, Day 3, Day 4 and so on, with its own calorie total.</div></div>
+          </div>
+          <div class="q">
+            <button aria-expanded="false"><span class="n">04.</span>Is my data private?</button>
+            <div class="a"><div>Your history is stored only in your own browser on this device. Photos are sent to the AI only to analyze them.</div></div>
+          </div>
+          <div class="q">
+            <button aria-expanded="false"><span class="n">05.</span>How accurate are the results?</button>
+            <div class="a"><div>They're estimates, best with good light and a clear top-down photo. They aren't medical advice.</div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -113,11 +200,47 @@
   <script src="common.js"></script>
   <script>
     NB.mountChrome("home");
+
+    /* FAQ accordion (single-open, with aria state) */
     document.querySelectorAll("#faq .q button").forEach((b) => b.addEventListener("click", () => {
       const q = b.parentElement, was = q.classList.contains("open");
-      document.querySelectorAll("#faq .q").forEach((x) => x.classList.remove("open"));
-      if (!was) q.classList.add("open");
+      document.querySelectorAll("#faq .q").forEach((x) => {
+        x.classList.remove("open");
+        x.querySelector("button").setAttribute("aria-expanded", "false");
+      });
+      if (!was) { q.classList.add("open"); b.setAttribute("aria-expanded", "true"); }
     }));
+
+    /* Scroll reveal: fade and lift blocks smoothly into view */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+        }
+      });
+    }, { threshold: 0.14, rootMargin: "0px 0px -40px 0px" });
+    document.querySelectorAll(".reveal, .reveal-card").forEach((el) => revealObserver.observe(el));
+
+    /* Gentle parallax drift on the big feature images (skipped for reduced motion) */
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const pxEls = Array.from(document.querySelectorAll("[data-parallax]"));
+    if (!reduceMotion && pxEls.length) {
+      let ticking = false;
+      const move = () => {
+        ticking = false;
+        const vh = window.innerHeight || 800;
+        pxEls.forEach((el) => {
+          const r = el.getBoundingClientRect();
+          const off = (r.top + r.height / 2 - vh / 2) / vh;   /* -~0.7 … +~0.7 */
+          const amt = parseFloat(el.dataset.parallax) || 24;  /* max px drift  */
+          el.style.transform = "translate3d(0," + (-off * amt).toFixed(1) + "px,0)";
+        });
+      };
+      const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(move); } };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+      move();
+    }
   </script>
 </body>
 </html>
