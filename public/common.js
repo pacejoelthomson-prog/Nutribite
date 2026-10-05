@@ -97,6 +97,70 @@ const NB = (() => {
   }
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+  const RATIO_KEY = "nb_aspect_ratio";
+  const RATIO_MIN_KEY = "nb_ratio_min";
+
+  // Early ratio mode setup to prevent layout flash
+  try {
+    const initialRatio = localStorage.getItem(RATIO_KEY);
+    if (initialRatio === "9-16") document.documentElement.classList.add("mode-9-16");
+    else if (initialRatio === "16-9") document.documentElement.classList.add("mode-16-9");
+  } catch {}
+
+  function applyRatioMode(ratio) {
+    document.documentElement.classList.remove("mode-9-16", "mode-16-9");
+    if (ratio === "9-16") document.documentElement.classList.add("mode-9-16");
+    else if (ratio === "16-9") document.documentElement.classList.add("mode-16-9");
+
+    document.querySelectorAll(".ratio-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.ratio === ratio);
+    });
+  }
+
+  function initRatioSwitcher() {
+    let existing = document.getElementById("ratioSwitch");
+    if (existing) existing.remove();
+
+    const cur = localStorage.getItem(RATIO_KEY) || "auto";
+    const isMin = localStorage.getItem(RATIO_MIN_KEY) === "1";
+
+    const wrap = document.createElement("div");
+    wrap.id = "ratioSwitch";
+    wrap.className = `ratio-switch ${isMin ? "minimized" : ""}`;
+    wrap.innerHTML = `
+      <div class="ratio-switch-inner" role="toolbar" aria-label="Aspect Ratio Switcher">
+        <span class="ratio-label">Ratio:</span>
+        <button class="ratio-btn ${cur === "9-16" ? "active" : ""}" data-ratio="9-16" title="Switch to 9:16 Vertical Mobile View">📱 9:16 Mobile</button>
+        <button class="ratio-btn ${cur === "16-9" ? "active" : ""}" data-ratio="16-9" title="Switch to 16:9 Widescreen Desktop View">💻 16:9 Desktop</button>
+        <button class="ratio-btn ${cur === "auto" ? "active" : ""}" data-ratio="auto" title="Auto Responsive based on screen">🔄 Auto</button>
+        <button class="ratio-toggle-btn" id="ratioToggleBtn" title="Minimize ratio switcher" aria-label="Minimize ratio switcher">✕</button>
+      </div>
+      <button class="ratio-mini-btn" id="ratioMiniBtn" title="Switch Aspect Ratio (9:16 / 16:9)" aria-label="Open ratio switcher">📐</button>
+    `;
+    document.body.appendChild(wrap);
+
+    applyRatioMode(cur);
+
+    wrap.querySelectorAll(".ratio-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const val = btn.dataset.ratio;
+        localStorage.setItem(RATIO_KEY, val);
+        applyRatioMode(val);
+      });
+    });
+
+    const toggleBtn = wrap.querySelector("#ratioToggleBtn");
+    const miniBtn = wrap.querySelector("#ratioMiniBtn");
+    toggleBtn?.addEventListener("click", () => {
+      wrap.classList.add("minimized");
+      localStorage.setItem(RATIO_MIN_KEY, "1");
+    });
+    miniBtn?.addEventListener("click", () => {
+      wrap.classList.remove("minimized");
+      localStorage.setItem(RATIO_MIN_KEY, "0");
+    });
+  }
+
   /** Shared glass menu bar + powered-by banner, injected on every page */
   function mountChrome(active) {
     const host = document.getElementById("chrome");
@@ -113,10 +177,16 @@ const NB = (() => {
         <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
       </nav></div>`;
     const links = document.getElementById("navLinks");
-    document.getElementById("menuBtn").addEventListener("click", () => links.classList.toggle("open"));
+    const menuBtn = document.getElementById("menuBtn");
+    menuBtn?.addEventListener("click", () => links.classList.toggle("open"));
+    links?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => links.classList.remove("open")));
     const nav = document.getElementById("nav");
     const onScroll = () => nav.classList.toggle("scrolled", scrollY > 20);
     addEventListener("scroll", onScroll, { passive: true }); onScroll();
+    document.addEventListener("click", (e) => {
+      if (nav && !nav.contains(e.target)) links.classList.remove("open");
+    });
+    initRatioSwitcher();
   }
 
   document.documentElement.classList.add('js');
@@ -125,5 +195,5 @@ const NB = (() => {
     document.querySelectorAll(".reveal, .reveal-card").forEach((el) => io.observe(el));
   });
 
-  return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome };
+  return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome, applyRatioMode };
 })();
