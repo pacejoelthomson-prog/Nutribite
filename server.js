@@ -148,7 +148,7 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    if (req.method !== "GET") return send(res, 405, { error: "Method not allowed" });
+    if (req.method !== "GET" && req.method !== "HEAD") return send(res, 405, { error: "Method not allowed" });
 
     // Static files
     let urlPath = decodeURIComponent(req.url.split("?")[0]);
@@ -157,6 +157,10 @@ const server = http.createServer(async (req, res) => {
     if (filePath !== PUBLIC_DIR && !filePath.startsWith(PUBLIC_DIR + path.sep)) return send(res, 403, "Forbidden", "text/plain");
     fs.readFile(filePath, (err, buf) => {
       if (err) return send(res, 404, "Not found", "text/plain");
+      if (req.method === "HEAD") {
+        res.writeHead(200, { "Content-Type": MIME[path.extname(filePath)] || "application/octet-stream" });
+        return res.end();
+      }
       send(res, 200, buf, MIME[path.extname(filePath)] || "application/octet-stream");
     });
   } catch (e) {
