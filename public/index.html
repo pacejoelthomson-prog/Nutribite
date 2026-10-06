@@ -32,23 +32,25 @@
       </div>
 
       <div class="phone-stage reveal">
-        <div class="phone"><div class="screen">
-          <h6>Calories today</h6>
-          <div class="big">1,842 <small>kcal · Day 4</small></div>
-          <svg class="chart" viewBox="0 0 260 100" preserveAspectRatio="none">
-            <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22c55e" stop-opacity=".28"/><stop offset="1" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs>
-            <path d="M0 70 C30 60 45 20 80 40 S130 90 160 55 S215 20 260 30 V100 H0Z" fill="url(#cg)"/>
-            <path d="M0 70 C30 60 45 20 80 40 S130 90 160 55 S215 20 260 30" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="80" cy="40" r="5" fill="#fff" stroke="#ef4444" stroke-width="2.5"/>
-          </svg>
-          <div class="list-title">Today's meals</div>
-          <div class="tx"><div class="ic">🍳</div><div><strong>Veg Omelette</strong><small>Breakfast · 8:20 AM</small></div><span class="amt">320</span></div>
-          <div class="tx"><div class="ic">🥗</div><div><strong>Chicken Bowl</strong><small>Lunch · 1:05 PM</small></div><span class="amt">540</span></div>
-          <div class="tx"><div class="ic">🍎</div><div><strong>Apple &amp; Nuts</strong><small>Snack · 4:30 PM</small></div><span class="amt">210</span></div>
-          <div class="tx"><div class="ic">🍝</div><div><strong>Pasta</strong><small>Dinner · 8:10 PM</small></div><span class="amt">770</span></div>
-        </div></div>
-        <div class="fcard a">Daily total<strong>1,842 kcal</strong></div>
-        <div class="fcard b">Goal progress<div class="pbar"><i></i></div><strong>68% of 2,700</strong></div>
+        <div class="phone-wrap">
+          <div class="phone"><div class="screen">
+            <h6>Calories today</h6>
+            <div class="big">1,842 <small>kcal · Day 4</small></div>
+            <svg class="chart" viewBox="0 0 260 100" preserveAspectRatio="none">
+              <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22c55e" stop-opacity=".28"/><stop offset="1" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs>
+              <path d="M0 70 C30 60 45 20 80 40 S130 90 160 55 S215 20 260 30 V100 H0Z" fill="url(#cg)"/>
+              <path d="M0 70 C30 60 45 20 80 40 S130 90 160 55 S215 20 260 30" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="80" cy="40" r="5" fill="#fff" stroke="#ef4444" stroke-width="2.5"/>
+            </svg>
+            <div class="list-title">Today's meals</div>
+            <div class="tx"><div class="ic">🍳</div><div><strong>Veg Omelette</strong><small>Breakfast · 8:20 AM</small></div><span class="amt">320</span></div>
+            <div class="tx"><div class="ic">🥗</div><div><strong>Chicken Bowl</strong><small>Lunch · 1:05 PM</small></div><span class="amt">540</span></div>
+            <div class="tx"><div class="ic">🍎</div><div><strong>Apple &amp; Nuts</strong><small>Snack · 4:30 PM</small></div><span class="amt">210</span></div>
+            <div class="tx"><div class="ic">🍝</div><div><strong>Pasta</strong><small>Dinner · 8:10 PM</small></div><span class="amt">770</span></div>
+          </div></div>
+          <div class="fcard a">Daily total<strong>1,842 kcal</strong></div>
+          <div class="fcard b">Goal progress<div class="pbar"><i></i></div><strong>68% of 2,700</strong></div>
+        </div>
       </div>
     </div>
   </div>
@@ -280,20 +282,43 @@
       move();
     }
 
-    /* Typewriter effect for "simple nutrition." */
+    /* Continuous looping typewriter effect for "simple nutrition." */
     (function () {
       const tw = document.getElementById("typewriter");
       if (!tw) return;
       const targetText = "simple nutrition.";
       tw.textContent = "";
-      let i = 0;
-      setTimeout(() => {
-        const timer = setInterval(() => {
-          tw.textContent = targetText.slice(0, i + 1);
-          i++;
-          if (i >= targetText.length) clearInterval(timer);
-        }, 85);
-      }, 320);
+      let charIdx = 0;
+      let isDeleting = false;
+
+      function step() {
+        if (!isDeleting) {
+          // Type characters forward
+          charIdx++;
+          tw.textContent = targetText.slice(0, charIdx);
+          if (charIdx === targetText.length) {
+            // Done typing! Wait 1.5 seconds as requested by user
+            isDeleting = true;
+            setTimeout(step, 1500);
+            return;
+          }
+          setTimeout(step, 85);
+        } else {
+          // Smooth backspace erasing
+          charIdx--;
+          tw.textContent = targetText.slice(0, charIdx);
+          if (charIdx === 0) {
+            // Finished erasing, small pause before typing again
+            isDeleting = false;
+            setTimeout(step, 350);
+            return;
+          }
+          setTimeout(step, 45);
+        }
+      }
+
+      // Initial start delay on page load
+      setTimeout(step, 350);
     })();
   </script>
 </body>

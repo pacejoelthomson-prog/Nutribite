@@ -165,18 +165,58 @@ const NB = (() => {
   function mountChrome(active) {
     const host = document.getElementById("chrome");
     if (!host) return;
-    const link = (href, key, label) => `<a href="${href}" class="${active === key ? "active" : ""}">${label}</a>`;
+    const link = (href, key, icon, label) =>
+      `<a href="${href}" class="nav-item ${active === key ? "active" : ""}" data-nav="${key}">
+        <span class="nav-icon" aria-hidden="true">${icon}</span>
+        <span class="nav-text">${label}</span>
+      </a>`;
     host.innerHTML = `
       <div class="powered-bar">⚡ <b>Powered by the most efficient AI</b> to detect the calories &amp; nutrients of the food in your hands</div>
       <div class="nav-wrap"><nav class="nav" id="nav">
         <a href="index.html" class="logo"><span class="logo-mark">🥗</span>NutriBite</a>
         <div class="nav-links" id="navLinks">
-          ${link("index.html", "home", "Home")}${link("scan.html", "scan", "Scan Food")}${link("progress.html", "progress", "My Progress")}
+          <span class="nav-glider" id="navGlider" aria-hidden="true"></span>
+          ${link("index.html", "home", "🏠", "Home")}
+          ${link("scan.html", "scan", "📷", "Scan Food")}
+          ${link("progress.html", "progress", "📊", "My Progress")}
         </div>
         <a href="scan.html" class="btn btn-dark btn-sm nav-cta">📷 Scan Food</a>
         <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
       </nav></div>`;
+
     const links = document.getElementById("navLinks");
+    const glider = document.getElementById("navGlider");
+    const items = links.querySelectorAll(".nav-item");
+    const activeItem = links.querySelector(".nav-item.active");
+
+    function setGliderPos(target) {
+      if (!glider || !target || window.innerWidth <= 860) return;
+      glider.style.width = target.offsetWidth + "px";
+      glider.style.transform = `translateX(${target.offsetLeft}px)`;
+      glider.style.opacity = "1";
+    }
+
+    function resetGlider() {
+      if (window.innerWidth <= 860) {
+        if (glider) glider.style.opacity = "0";
+        return;
+      }
+      if (activeItem) {
+        setGliderPos(activeItem);
+      } else if (glider) {
+        glider.style.opacity = "0";
+      }
+    }
+
+    items.forEach((item) => {
+      item.addEventListener("mouseenter", () => setGliderPos(item));
+      item.addEventListener("focus", () => setGliderPos(item));
+    });
+
+    links.addEventListener("mouseleave", resetGlider);
+    setTimeout(resetGlider, 100);
+    window.addEventListener("resize", resetGlider);
+
     const menuBtn = document.getElementById("menuBtn");
     menuBtn?.addEventListener("click", () => links.classList.toggle("open"));
     links?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => links.classList.remove("open")));
