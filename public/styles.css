@@ -917,6 +917,18 @@ html.js .reveal-card.in .showcase-visual {
   /* Stats & FAQ & CTA in 9:16 */
   .stats, .faq { grid-template-columns: 1fr; gap: 32px; }
   .stat strong { font-size: 2.8rem; }
+  .donut-card {
+    right: 12px;
+    bottom: 12px;
+    padding: 8px 12px;
+    gap: 10px;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px -6px rgba(16, 24, 40, 0.2);
+  }
+  .donut { width: 48px; height: 48px; }
+  .donut::after { width: 30px; height: 30px; }
+  .donut-legend { font-size: .64rem; gap: 2px; font-weight: 600; }
+  .donut-legend span::before { width: 6px; height: 6px; margin-right: 4px; }
   .cta { padding: 48px 20px; border-radius: 26px; }
   .cta .btn { width: 100%; justify-content: center; }
   section { padding: 55px 0; }
@@ -1007,6 +1019,18 @@ html.mode-9-16 .showcase-frame { border-radius: 18px; }
 html.mode-9-16 .showcase-frame img { aspect-ratio: 4 / 3; min-height: 220px; border-radius: 17px; }
 html.mode-9-16 .stats, html.mode-9-16 .faq { grid-template-columns: 1fr; gap: 32px; }
 html.mode-9-16 .stat strong { font-size: 2.8rem; }
+html.mode-9-16 .donut-card {
+  right: 12px;
+  bottom: 12px;
+  padding: 8px 12px;
+  gap: 10px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px -6px rgba(16, 24, 40, 0.2);
+}
+html.mode-9-16 .donut { width: 48px; height: 48px; }
+html.mode-9-16 .donut::after { width: 30px; height: 30px; }
+html.mode-9-16 .donut-legend { font-size: .64rem; gap: 2px; font-weight: 600; }
+html.mode-9-16 .donut-legend span::before { width: 6px; height: 6px; margin-right: 4px; }
 html.mode-9-16 .cta { padding: 48px 20px; border-radius: 26px; }
 html.mode-9-16 .cta .btn { width: 100%; justify-content: center; }
 html.mode-9-16 section { padding: 55px 0; }
