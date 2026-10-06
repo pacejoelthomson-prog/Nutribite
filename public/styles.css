@@ -19,6 +19,7 @@
   --shadow: 0 24px 60px -24px rgba(16, 24, 40, 0.25);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 body {
   font-family: "Urbanist", system-ui, -apple-system, sans-serif;
@@ -607,8 +608,7 @@ footer .container { display: flex; justify-content: space-between; align-items: 
 .scan-line { position: absolute; left: 7%; right: 7%; height: 3px; top: 12%; z-index: 2; background: linear-gradient(90deg, transparent, #86efac, transparent); box-shadow: 0 0 20px 4px rgba(134, 239, 172, .6); border-radius: 3px; animation: scan 3s ease-in-out infinite; }
 @keyframes scan { 0%, 100% { top: 12%; } 50% { top: 86%; } }
 .viewport-msg { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; text-align: center; padding: 24px; color: #cbd2dc; background: radial-gradient(circle, #1a1d24, #0c0d10); transition: opacity .3s, visibility .3s; }
-/* FIX: lets JS hide the message so it can never block the live camera */
-.viewport-msg.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+.viewport-msg[hidden], .viewport-msg.hide { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 .viewport-msg .big { font-size: 3rem; margin-bottom: 6px; }
 .viewport-msg p { max-width: 300px; margin: 0 auto 14px; }
 .actions { display: flex; gap: 12px; margin-top: 18px; justify-content: center; align-items: center; flex-wrap: wrap; }

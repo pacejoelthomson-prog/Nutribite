@@ -17,6 +17,8 @@
 
   function showMsg(icon, text, action) {
     camMsg.hidden = false;
+    camMsg.classList.remove("hide");
+    camMsg.style.display = "grid";
     camMsg.innerHTML = `<div><div class="big">${icon}</div><p>${text}</p>
       ${action ? `<button class="btn btn-green btn-sm" data-act="${action.key}">${action.label}</button>` : ""}</div>`;
     camMsg.querySelector("[data-act=start]")?.addEventListener("click", startCamera);
@@ -26,44 +28,81 @@
 
   async function startCamera() {
     if (!navigator.mediaDevices?.getUserMedia) {
-      showMsg("🚫", "Camera isn't available here (it needs HTTPS or localhost). Upload a photo instead.", { key: "upload", label: "Upload a Photo" });
-      return NB.toast("Scanner not available — please upload a photo.", "error");
+      showMsg("🚫", "Camera isn't available in this browser (it requires HTTPS or localhost). Please upload a photo instead.", { key: "upload", label: "Upload a Photo" });
+      return NB.toast("Camera not available — please upload a photo.", "error");
     }
     stopCamera(true);
     showMsg("⏳", "Starting camera…");
+
+    // Ensure video element properties for mobile & Safari autoplay
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    video.setAttribute("autoplay", "");
+    video.setAttribute("muted", "");
+
     try {
-      const constraints = {
-        video: { facingMode: { ideal: facing } },
-        audio: false
-      };
-      stream = await navigator.mediaDevices.getUserMedia(constraints);
-      video.srcObject = stream;
-
-      await new Promise((resolve) => {
-        if (video.readyState >= 2) return resolve();
-        video.onloadeddata = () => resolve();
-        setTimeout(resolve, 1200);
-      });
-
+      let mediaStream;
+      // 1. Try with preferred facingMode
       try {
-        await video.play();
-      } catch (e) {
-        console.warn("video.play() warning:", e);
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: facing } },
+          audio: false
+        });
+      } catch (errFacing) {
+        console.warn("Facing constraint failed, falling back to basic video constraint:", errFacing);
+        // 2. Fallback to basic video constraint (guarantees webcam access on laptops)
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false
+        });
       }
 
-      video.hidden = false;
-      camMsg.hidden = true;
-      liveLine.hidden = false;
-      btnCapture.disabled = btnFlip.disabled = btnStop.disabled = false;
+      stream = mediaStream;
+      video.srcObject = stream;
+
+      const revealVideo = () => {
+        video.hidden = false;
+        video.style.display = "block";
+        camMsg.hidden = true;
+        camMsg.classList.add("hide");
+        camMsg.style.display = "none";
+        liveLine.hidden = false;
+        btnCapture.disabled = btnFlip.disabled = btnStop.disabled = false;
+      };
+
+      video.onloadedmetadata = revealVideo;
+      video.onloadeddata = revealVideo;
+      video.oncanplay = revealVideo;
+
+      try {
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.then(revealVideo).catch(console.warn);
+        }
+      } catch (e) {
+        console.warn("video.play error:", e);
+      }
+
+      // Safety timeout: reveal video within 250ms so UI never hangs
+      setTimeout(revealVideo, 250);
     } catch (err) {
-      console.warn("Camera access failed:", err);
-      showMsg("😕", "We couldn't access your camera. You can upload a photo of your food instead.", { key: "upload", label: "Upload a Photo" });
-      NB.toast("Scanner not working — try uploading a photo.", "error");
+      console.error("Camera access failed:", err);
+      showMsg("😕", `Could not access camera (${err.name || "Access Denied"}). Please check browser permissions or upload a photo.`, { key: "upload", label: "Upload a Photo" });
+      NB.toast(`Camera error: ${err.message || err.name || "Denied"}`, "error");
     }
   }
+
   function stopCamera(silent) {
-    stream?.getTracks().forEach((t) => t.stop()); stream = null;
-    video.hidden = true; liveLine.hidden = true;
+    if (stream) {
+      stream.getTracks().forEach((t) => t.stop());
+      stream = null;
+    }
+    video.srcObject = null;
+    video.hidden = true;
+    video.style.display = "none";
+    liveLine.hidden = true;
     btnCapture.disabled = btnFlip.disabled = btnStop.disabled = true;
     if (!silent) idle();
   }
