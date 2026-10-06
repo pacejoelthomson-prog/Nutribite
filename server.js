@@ -126,7 +126,7 @@ function rateLimited(req) {
 
 const server = http.createServer(async (req, res) => {
   try {
-    if (req.url === "/healthz") return send(res, 200, "ok", "text/plain");
+    if (req.url === "/healthz" || req.url === "/api/health" || req.url === "/health") return send(res, 200, { status: "ok" });
 
     if (req.method === "POST" && req.url === "/api/analyze") {
       if (!API_KEY) return send(res, 500, { error: "OPENROUTER_API_KEY is not set on the server." });
