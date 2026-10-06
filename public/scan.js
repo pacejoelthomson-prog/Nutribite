@@ -32,12 +32,31 @@
     stopCamera(true);
     showMsg("⏳", "Starting camera…");
     try {
-      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: facing }, width: { ideal: 1280 }, height: { ideal: 960 } }, audio: false });
-      video.srcObject = stream; await video.play();
-      video.hidden = false; camMsg.hidden = true; liveLine.hidden = false;
+      const constraints = {
+        video: { facingMode: { ideal: facing } },
+        audio: false
+      };
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
+      video.srcObject = stream;
+
+      await new Promise((resolve) => {
+        if (video.readyState >= 2) return resolve();
+        video.onloadeddata = () => resolve();
+        setTimeout(resolve, 1200);
+      });
+
+      try {
+        await video.play();
+      } catch (e) {
+        console.warn("video.play() warning:", e);
+      }
+
+      video.hidden = false;
+      camMsg.hidden = true;
+      liveLine.hidden = false;
       btnCapture.disabled = btnFlip.disabled = btnStop.disabled = false;
     } catch (err) {
-      console.warn(err);
+      console.warn("Camera access failed:", err);
       showMsg("😕", "We couldn't access your camera. You can upload a photo of your food instead.", { key: "upload", label: "Upload a Photo" });
       NB.toast("Scanner not working — try uploading a photo.", "error");
     }
