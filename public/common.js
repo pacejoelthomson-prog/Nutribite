@@ -171,7 +171,7 @@ const NB = (() => {
         <span class="nav-text">${label}</span>
       </a>`;
     host.innerHTML = `
-      <div class="powered-bar">⚡ <b>Powered by the most efficient AI</b> to detect the calories &amp; nutrients of the food in your hands</div>
+      <div class="powered-bar">⚡ <b>Powered by Google Gemini 3.6 Flash AI</b> to detect the calories &amp; nutrients of the food in your hands</div>
       <div class="nav-wrap"><nav class="nav" id="nav">
         <a href="index.html" class="logo"><span class="logo-mark">🥗</span>NutriBite</a>
         <div class="nav-links" id="navLinks">
