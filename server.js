@@ -16,7 +16,7 @@ if (fs.existsSync(envPath)) {
 
 const PORT = Number(process.env.PORT) || 3000;
 const API_KEY = process.env.OPENROUTER_API_KEY;
-const MODELS = (process.env.OPENROUTER_MODELS || "google/gemini-3.6-flash,google/gemini-2.5-flash,openai/gpt-4o-mini")
+const MODELS = (process.env.OPENROUTER_MODELS || "google/gemini-2.5-flash,openai/gpt-4o-mini")
   .split(",").map((s) => s.trim()).filter(Boolean);
 const PUBLIC_DIR = path.join(__dirname, "public");
 
@@ -30,18 +30,22 @@ const MIME = {
   ".ico": "image/x-icon",
 };
 
-const PROMPT = `You are an expert nutritionist with computer vision skills.
-Analyze the food in this image and estimate its nutrition for the portion visible.
-Respond ONLY with valid minified JSON (no markdown, no code fences) in exactly this shape:
-{"isFood":true,"foodName":"string","description":"short one-sentence description","servingSize":"e.g. 1 bowl (~250g)","confidence":0-100,
+const PROMPT = `You are an elite clinical dietitian and computer vision food analyst.
+Inspect the food image using expert culinary perception:
+1. Detect all visible ingredients, garnishes, seeds, nuts, and micro-toppings.
+2. Account for hidden calories: estimate absorbed cooking oils, butter, dressings, sauces, and marinades.
+3. Assess 3D plate depth, bowl curvature, and container dimensions to calculate realistic portion weight in grams.
+4. Calculate precise USDA-standard calories, macros, and key micronutrients.
+Respond ONLY with valid minified JSON (no markdown, no code fences) in this exact shape:
+{"isFood":true,"foodName":"Concise Dish Name","description":"One clear sentence summarizing the meal","servingSize":"e.g. 1 bowl (~380g)","confidence":0-100,
 "calories":number,
 "macros":{"protein":grams,"carbs":grams,"fat":grams,"fiber":grams,"sugar":grams},
 "micros":[{"name":"Sodium","amount":number,"unit":"mg"},{"name":"Potassium","amount":number,"unit":"mg"},{"name":"Calcium","amount":number,"unit":"mg"},{"name":"Iron","amount":number,"unit":"mg"},{"name":"Vitamin C","amount":number,"unit":"mg"},{"name":"Vitamin A","amount":number,"unit":"µg"},{"name":"Cholesterol","amount":number,"unit":"mg"}],
 "items":[{"name":"string","calories":number}],
 "healthScore":1-10,
-"pros":["3-4 short health advantages of eating this food"],
-"cons":["3-4 short health disadvantages or things to watch out for"],
-"tips":["short healthy tip","another tip"]}
+"pros":["2-3 brief health advantages (max 8 words each)"],
+"cons":["2-3 brief nutritional watchouts (max 8 words each)"],
+"tips":["1-2 practical portion or balance tips"]}
 If the image contains no food, respond with {"isFood":false,"message":"short explanation"}.`;
 
 function send(res, status, body, type = "application/json; charset=utf-8") {
@@ -88,7 +92,7 @@ async function analyze(imageDataUrl) {
         body: JSON.stringify({
           model,
           temperature: 0.2,
-          max_tokens: 1000,
+          max_tokens: 650,
           messages: [{
             role: "user",
             content: [
