@@ -7,7 +7,7 @@ services:
     startCommand: node server.js
     healthCheckPath: /healthz
     envVars:
-      - key: OPENROUTER_API_KEY
+      - key: GEMINI_API_KEY
         sync: false
-      - key: OPENROUTER_MODELS
-        value: google/gemini-2.5-flash,openai/gpt-4o-mini
+      - key: GEMINI_MODELS
+        value: gemini-3.5-flash,gemini-3.7-flash,gemini-3.8-flash,gemini-flash-latest

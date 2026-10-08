@@ -15,8 +15,11 @@ if (fs.existsSync(envPath)) {
 }
 
 const PORT = Number(process.env.PORT) || 3000;
-const API_KEY = process.env.OPENROUTER_API_KEY;
-const MODELS = (process.env.OPENROUTER_MODELS || "google/gemini-2.5-flash,openai/gpt-4o-mini")
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODELS = (process.env.GEMINI_MODELS || "gemini-3.5-flash,gemini-3.7-flash,gemini-3.8-flash,gemini-flash-latest")
+  .split(",").map((s) => s.trim()).filter(Boolean);
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const OPENROUTER_MODELS = (process.env.OPENROUTER_MODELS || "google/gemini-2.5-flash,openai/gpt-4o-mini")
   .split(",").map((s) => s.trim()).filter(Boolean);
 const PUBLIC_DIR = path.join(__dirname, "public");
 
@@ -78,41 +81,86 @@ function extractJson(text) {
 
 async function analyze(imageDataUrl) {
   let lastErr;
-  for (const model of MODELS) {
-    try {
-      const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": `http://localhost:${PORT}`,
-          "X-Title": "NutriBite",
-        },
-        signal: AbortSignal.timeout(45000),
-        body: JSON.stringify({
-          model,
-          temperature: 0.2,
-          max_tokens: 650,
-          messages: [{
-            role: "user",
-            content: [
-              { type: "text", text: PROMPT },
-              { type: "image_url", image_url: { url: imageDataUrl } },
-            ],
+  const match = imageDataUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
+  const mimeType = match ? match[1] : "image/jpeg";
+  const base64Data = match ? match[2] : imageDataUrl.replace(/^data:image\/[a-zA-Z]+;base64,/, "");
+
+  // 1. Primary: Direct Google Gemini API with model fallback
+  if (GEMINI_API_KEY) {
+    for (const model of GEMINI_MODELS) {
+      try {
+        const payload = {
+          contents: [{
+            parts: [
+              { text: PROMPT },
+              { inlineData: { mimeType, data: base64Data } }
+            ]
           }],
-        }),
-      });
-      const data = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(data?.error?.message || `OpenRouter error ${r.status}`);
-      const result = extractJson(data?.choices?.[0]?.message?.content);
-      result.model = model;
-      return result;
-    } catch (e) {
-      console.warn(`[NutriBite] model ${model} failed: ${e.message}`);
-      lastErr = e;
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 2500,
+            thinkingConfig: { thinkingBudget: 0 }
+          }
+        };
+
+        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: AbortSignal.timeout(45000),
+          body: JSON.stringify(payload)
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data?.error?.message || `Gemini error ${r.status}`);
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const result = extractJson(text);
+        result.model = `Google Gemini (${model})`;
+        return result;
+      } catch (e) {
+        console.warn(`[NutriBite] Gemini model ${model} failed: ${e.message}`);
+        lastErr = e;
+      }
     }
   }
-  throw lastErr || new Error("All models failed");
+
+  // 2. Secondary fallback: OpenRouter if configured
+  if (OPENROUTER_API_KEY) {
+    for (const model of OPENROUTER_MODELS) {
+      try {
+        const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": `http://localhost:${PORT}`,
+            "X-Title": "NutriBite",
+          },
+          signal: AbortSignal.timeout(45000),
+          body: JSON.stringify({
+            model,
+            temperature: 0.2,
+            max_tokens: 1500,
+            messages: [{
+              role: "user",
+              content: [
+                { type: "text", text: PROMPT },
+                { type: "image_url", image_url: { url: imageDataUrl } },
+              ],
+            }],
+          }),
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data?.error?.message || `OpenRouter error ${r.status}`);
+        const result = extractJson(data?.choices?.[0]?.message?.content);
+        result.model = model;
+        return result;
+      } catch (e) {
+        console.warn(`[NutriBite] model ${model} failed: ${e.message}`);
+        lastErr = e;
+      }
+    }
+  }
+
+  throw lastErr || new Error("All vision models failed");
 }
 
 // --- Simple per-IP rate limit so a public link can't drain your OpenRouter credits ---
@@ -133,7 +181,7 @@ const server = http.createServer(async (req, res) => {
     if (req.url === "/healthz" || req.url === "/api/health" || req.url === "/health") return send(res, 200, { status: "ok" });
 
     if (req.method === "POST" && req.url === "/api/analyze") {
-      if (!API_KEY) return send(res, 500, { error: "OPENROUTER_API_KEY is not set on the server." });
+      if (!GEMINI_API_KEY && !OPENROUTER_API_KEY) return send(res, 500, { error: "GEMINI_API_KEY is not set on the server." });
       if (rateLimited(req)) return send(res, 429, { error: "Too many scans. Please try again in a while." });
       let image;
       try {
