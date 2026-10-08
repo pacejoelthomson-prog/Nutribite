@@ -16,7 +16,7 @@ if (fs.existsSync(envPath)) {
 
 const PORT = Number(process.env.PORT) || 3000;
 const API_KEY = process.env.OPENROUTER_API_KEY;
-const MODELS = (process.env.OPENROUTER_MODELS || "google/gemini-3.6-flash,openai/gpt-4o")
+const MODELS = (process.env.OPENROUTER_MODELS || "google/gemini-3.6-flash,google/gemini-2.5-flash,openai/gpt-4o-mini")
   .split(",").map((s) => s.trim()).filter(Boolean);
 const PUBLIC_DIR = path.join(__dirname, "public");
 
