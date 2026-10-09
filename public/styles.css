@@ -18,25 +18,9 @@
   --radius: 28px;
   --shadow: 0 24px 60px -24px rgba(16, 24, 40, 0.25);
 }
-/* ==========================================================
-   Global Mobile Reset & Tap Highlight Elimination
-   Disables mobile Chrome / WebKit blue tap overlay & focus flash
-   ========================================================== */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent !important;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 [hidden] { display: none !important; }
-html {
-  scroll-behavior: smooth;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent !important;
-}
+html { scroll-behavior: smooth; }
 body {
   font-family: "Urbanist", system-ui, -apple-system, sans-serif;
   background: var(--bg); color: var(--ink); line-height: 1.55;
@@ -44,53 +28,14 @@ body {
   overflow-x: hidden; overflow-x: clip;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  -webkit-tap-highlight-color: transparent !important;
 }
 img { max-width: 100%; display: block; }
-a {
-  color: inherit;
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent !important;
-  touch-action: manipulation;
-}
-button {
-  font: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-  color: inherit;
-  -webkit-tap-highlight-color: transparent !important;
-  touch-action: manipulation;
-}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+.container { width: min(1160px, 92%); margin: 0 auto; }
 
-/* Eliminate blue tap box and unwanted touch callouts on all interactive elements */
-a, button, input, select, textarea, label, summary, [role="button"],
-.btn, .nav-item, .menu-btn, .seg button, .shutter, .dropzone,
-.ratio-btn, .ratio-mini-btn, .ratio-toggle-btn {
-  -webkit-tap-highlight-color: transparent !important;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
-  -webkit-touch-callout: none;
-}
-
-/* Remove default mobile browser touch focus outlines while preserving keyboard accessibility */
-*:focus:not(:focus-visible) {
-  outline: none !important;
-  box-shadow: none !important;
-}
-a:focus:not(:focus-visible),
-button:focus:not(:focus-visible),
-input:focus:not(:focus-visible),
-select:focus:not(:focus-visible),
-textarea:focus:not(:focus-visible),
-[tabindex]:focus:not(:focus-visible),
-.btn:focus:not(:focus-visible),
-.nav-item:focus:not(:focus-visible) {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Visible green focus ring for keyboard navigation ONLY */
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+/* FIX: visible keyboard focus everywhere */
+a:focus-visible, button:focus-visible, input:focus-visible {
   outline: 3px solid rgba(34, 197, 94, .55); outline-offset: 3px;
 }
 
@@ -178,12 +123,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color: var(--ink);
   font-weight: 700;
 }
-.nav-item:active {
-  transform: scale(0.96);
-  opacity: 0.85;
-}
-.menu-btn { display: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; background: rgba(12, 13, 16, .06); transition: transform 0.15s, background 0.15s; }
-.menu-btn:active { transform: scale(0.92); background: rgba(12, 13, 16, 0.14); }
+.menu-btn { display: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; background: rgba(12, 13, 16, .06); }
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -935,7 +875,6 @@ html.js .reveal-card.in .showcase-visual {
   .nav-links.open { opacity: 1; pointer-events: auto; transform: none; }
   .nav-links a, .nav-item { width: 100%; padding: 12px 16px; font-size: .95rem; border-radius: 14px; justify-content: flex-start; }
   .nav-item:hover, .nav-item.active { background: rgba(12, 13, 16, 0.06); }
-  .nav-item:active { background: rgba(12, 13, 16, 0.12); transform: scale(0.98); }
   .nav-cta { display: none; }
   .container { width: 100%; padding: 0 16px; }
   .powered-bar { font-size: .74rem; padding: 8px 12px; }
