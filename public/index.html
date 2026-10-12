@@ -3,15 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NutriBite – Scan food, know your calories</title>
-  <meta name="description" content="Scan any food with AI and instantly see calories, nutrients, advantages and disadvantages. Track your intake every day." />
+  <title>BiteLens — AI Food Scanner | Scan Food, Know Your Calories</title>
+  <meta name="description" content="BiteLens is an AI food scanner that instantly detects calories, macros, nutrients, and advantages/disadvantages from a photo. Track your daily intake with ease." />
+  <link rel="canonical" href="https://nutribite-cvg1.onrender.com/" />
+  <!-- TODO: update after domain migration -->
+  <meta property="og:title" content="BiteLens — AI Food Scanner | Scan Food, Know Your Calories" />
+  <meta property="og:description" content="Point your camera at any meal to get calories, macros, and nutrients in seconds with BiteLens AI." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nutribite-cvg1.onrender.com/" />
+  <!-- TODO: update after domain migration -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BiteLens — AI Food Scanner" />
+  <meta name="twitter:description" content="Point your camera at any meal to get calories, macros, and nutrients in seconds." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥗</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%230c0d10'/><circle cx='50' cy='50' r='38' fill='none' stroke='%2322c55e' stroke-width='6'/><circle cx='50' cy='50' r='20' fill='%2322c55e'/><circle cx='50' cy='50' r='10' fill='%23ffffff'/></svg>" />
   <link rel="stylesheet" href="styles.css" />
   <script>document.documentElement.classList.add('js');</script>
-  <!-- If JavaScript is disabled, never leave content hidden -->
-  <noscript><style>.reveal,.reveal-card{opacity:1!important;transform:none!important}.typewriter-cursor{display:none!important;}</style></noscript>
+  <!-- JSON-LD Structured Data for Google Search -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BiteLens",
+    "url": "https://nutribite-cvg1.onrender.com/",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "All",
+    "description": "AI food scanner that instantly calculates calories, macros, micronutrients, advantages, and disadvantages from a food photo.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
 </head>
 <body>
   <div id="chrome"></div>
@@ -20,7 +45,7 @@
     <div class="container hero">
       <div class="hero-text reveal">
         <h1>Reimagine eating,<br /><span class="typewriter-wrap"><span class="typewriter-text" id="typewriter">simple nutrition.</span><span class="typewriter-cursor" aria-hidden="true"></span></span></h1>
-        <p class="lead">Point your camera at any meal. NutriBite's AI instantly shows calories, nutrients, advantages and disadvantages — and tracks your intake day by day.</p>
+        <p class="lead">Point your camera at any meal. BiteLens's AI instantly shows calories, nutrients, advantages and disadvantages — and tracks your intake day by day.</p>
         <div class="hero-cta">
           <a href="scan.html" class="btn btn-dark">📷 Scan Your Food</a>
           <a href="progress.html" class="btn btn-light">My Progress →</a>
@@ -56,7 +81,7 @@
   </div>
 
   <!-- Infinite marquee strip (stops on hover) -->
-  <div class="strip" aria-label="Nutritional elements detected by NutriBite">
+  <div class="strip" aria-label="Nutritional elements detected by BiteLens">
     <div class="marquee-track">
       <div class="marquee-group">
         <span>🔥 Calories</span>
@@ -158,7 +183,7 @@
           <div class="showcase-copy">
             <span class="block-tag tag-blue"><span class="tag-icon">📅</span> 03 · Lifelong Tracking</span>
             <h3>Day to day progress</h3>
-            <p class="block-desc">NutriBite isn't a temporary 3-day challenge. It's built for your daily life. Every food you scan is automatically attributed to Day 1, Day 2, Day 3, Day 4, and beyond—with visual goal rings and weekly bar charts.</p>
+            <p class="block-desc">BiteLens isn't a temporary 3-day challenge. It's built for your daily life. Every food you scan is automatically attributed to Day 1, Day 2, Day 3, Day 4, and beyond—with visual goal rings and weekly bar charts.</p>
             <ul class="block-points">
               <li><span class="point-check check-blue">✓</span> Continuous Day 1, Day 2, Day 3… logging without reset</li>
               <li><span class="point-check check-blue">✓</span> Custom daily calorie targets with visual progress rings</li>
@@ -201,7 +226,7 @@
         <div class="faq-head"><h2>Track every meal and<br />learn what you eat</h2><a href="scan.html" class="btn btn-light btn-sm">Start scanning →</a></div>
         <div id="faq">
           <div class="q open">
-            <button aria-expanded="true"><span class="n">01.</span>How does NutriBite know the calories?</button>
+            <button aria-expanded="true"><span class="n">01.</span>How does BiteLens know the calories?</button>
             <div class="a"><div>An AI vision model looks at your photo, identifies the food and estimates the portion, then calculates calories and nutrients.</div></div>
           </div>
           <div class="q">
@@ -233,8 +258,8 @@
   </section>
 
   <footer><div class="container">
-    <a href="index.html" class="logo"><span class="logo-mark">🥗</span>NutriBite</a>
-    <span>AI estimates are approximate and not medical advice. © 2026 NutriBite</span>
+    <a href="index.html" class="logo"><span class="logo-mark">🔍</span>BiteLens</a>
+    <span>AI estimates are approximate and not medical advice. © 2026 BiteLens</span>
   </div></footer>
 
   <script src="common.js"></script>

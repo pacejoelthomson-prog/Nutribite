@@ -1,4 +1,4 @@
-// NutriBite results page: calories, nutrients, advantages and disadvantages
+// BiteLens results page: calories, nutrients, advantages and disadvantages
 (() => {
   const root = document.getElementById("results");
   const r = NB.loadResult();

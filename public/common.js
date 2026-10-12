@@ -1,26 +1,43 @@
-// Shared helpers for NutriBite: daily tracking (unlimited days), rings, toasts, nav
+// Shared helpers for BiteLens: daily tracking (unlimited days), rings, toasts, nav
 const NB = (() => {
-  const LOG_KEY = "nb_log";
-  const START_KEY = "nb_start";
-  const GOAL_KEY = "nb_goal";
-  const RESULT_KEY = "nb_last_result";
+  const LOG_KEY = "bitelens_log";
+  const START_KEY = "bitelens_start";
+  const GOAL_KEY = "bitelens_goal";
+  const RESULT_KEY = "bitelens_last_result";
   const DAY_MS = 86400000;
+
+  // Backwards compatibility helper for legacy storage keys
+  const getStored = (key, fallbackKey) => {
+    try {
+      const val = localStorage.getItem(key);
+      if (val !== null) return val;
+      if (fallbackKey) {
+        const oldVal = localStorage.getItem(fallbackKey);
+        if (oldVal !== null) {
+          localStorage.setItem(key, oldVal);
+          localStorage.removeItem(fallbackKey);
+          return oldVal;
+        }
+      }
+    } catch (e) {}
+    return null;
+  };
 
   const startOfDay = (t = Date.now()) => { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
 
   // Day 1 = the day of your very first scan; Day 2, 3, 4 … follow by calendar date, forever.
-  const getStart = () => Number(localStorage.getItem(START_KEY)) || startOfDay();
+  const getStart = () => Number(getStored(START_KEY, "nb_start")) || startOfDay();
   const dayOf = (t = Date.now()) => Math.round((startOfDay(t) - getStart()) / DAY_MS) + 1;
   const currentDay = () => dayOf();
   const dateOfDay = (day) => new Date(getStart() + (day - 1) * DAY_MS);
   const fmtDate = (d) => d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
   const fmtTime = (t) => new Date(t).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
 
-  const getLog = () => { try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; } catch { return []; } };
+  const getLog = () => { try { return JSON.parse(getStored(LOG_KEY, "nb_log")) || []; } catch { return []; } };
   const saveLog = (log) => localStorage.setItem(LOG_KEY, JSON.stringify(log));
 
   function addEntry(result) {
-    if (!localStorage.getItem(START_KEY)) localStorage.setItem(START_KEY, startOfDay());
+    if (!getStored(START_KEY, "nb_start")) localStorage.setItem(START_KEY, startOfDay());
     const log = getLog();
     const entry = {
       id: Date.now(), ts: Date.now(), day: currentDay(),
@@ -97,12 +114,12 @@ const NB = (() => {
   }
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-  const RATIO_KEY = "nb_aspect_ratio";
-  const RATIO_MIN_KEY = "nb_ratio_min";
+  const RATIO_KEY = "bitelens_aspect_ratio";
+  const RATIO_MIN_KEY = "bitelens_ratio_min";
 
   // Early ratio mode setup to prevent layout flash
   try {
-    const initialRatio = localStorage.getItem(RATIO_KEY);
+    const initialRatio = getStored(RATIO_KEY, "nb_aspect_ratio");
     if (initialRatio === "9-16") document.documentElement.classList.add("mode-9-16");
     else if (initialRatio === "16-9") document.documentElement.classList.add("mode-16-9");
   } catch {}
@@ -121,8 +138,8 @@ const NB = (() => {
     let existing = document.getElementById("ratioSwitch");
     if (existing) existing.remove();
 
-    const cur = localStorage.getItem(RATIO_KEY) || "auto";
-    const isMin = localStorage.getItem(RATIO_MIN_KEY) === "1";
+    const cur = getStored(RATIO_KEY, "nb_aspect_ratio") || "auto";
+    const isMin = getStored(RATIO_MIN_KEY, "nb_ratio_min") === "1";
 
     const wrap = document.createElement("div");
     wrap.id = "ratioSwitch";
@@ -173,7 +190,7 @@ const NB = (() => {
     host.innerHTML = `
       <div class="powered-bar">⚡ <b>Powered by AI</b> to detect the calories &amp; nutrients of the food in your hands</div>
       <div class="nav-wrap"><nav class="nav" id="nav">
-        <a href="index.html" class="logo"><span class="logo-mark">🥗</span>NutriBite</a>
+        <a href="index.html" class="logo"><span class="logo-mark">🔍</span>BiteLens</a>
         <div class="nav-links" id="navLinks">
           <span class="nav-glider" id="navGlider" aria-hidden="true"></span>
           ${link("index.html", "home", "🏠", "Home")}
@@ -237,3 +254,9 @@ const NB = (() => {
 
   return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome, applyRatioMode };
 })();
+
+if (typeof window !== "undefined") {
+  window.BiteLens = NB;
+  window.BL = NB;
+  window.NB = NB;
+}

@@ -1,7 +1,7 @@
 {
-  "name": "nutribite",
+  "name": "bitelens",
   "version": "1.0.0",
-  "description": "AI food scanner – calories and nutrients from a photo",
+  "description": "BiteLens – AI food scanner for calories, macros, and nutrients from a photo",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

@@ -1,5 +1,5 @@
-// NutriBite – zero-dependency Node server.
-// Serves the static site from /public and proxies food analysis to OpenRouter,
+// BiteLens – zero-dependency Node server.
+// Serves the static site from /public and proxies food analysis to Gemini Vision AI,
 // so the API key never reaches the browser.
 const http = require("http");
 const fs = require("fs");
@@ -31,6 +31,9 @@ const MIME = {
   ".png": "image/png",
   ".jpg": "image/jpeg",
   ".ico": "image/x-icon",
+  ".txt": "text/plain; charset=utf-8",
+  ".xml": "application/xml; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
 };
 
 const PROMPT = `You are an elite clinical dietitian and computer vision food analyst.
@@ -116,7 +119,7 @@ async function analyze(imageDataUrl) {
         result.model = `Google Gemini (${model})`;
         return result;
       } catch (e) {
-        console.warn(`[NutriBite] Gemini model ${model} failed: ${e.message}`);
+        console.warn(`[BiteLens] Gemini model ${model} failed: ${e.message}`);
         lastErr = e;
       }
     }
@@ -132,7 +135,7 @@ async function analyze(imageDataUrl) {
             Authorization: `Bearer ${OPENROUTER_API_KEY}`,
             "Content-Type": "application/json",
             "HTTP-Referer": `http://localhost:${PORT}`,
-            "X-Title": "NutriBite",
+            "X-Title": "BiteLens",
           },
           signal: AbortSignal.timeout(45000),
           body: JSON.stringify({
@@ -154,7 +157,7 @@ async function analyze(imageDataUrl) {
         result.model = model;
         return result;
       } catch (e) {
-        console.warn(`[NutriBite] model ${model} failed: ${e.message}`);
+        console.warn(`[BiteLens] model ${model} failed: ${e.message}`);
         lastErr = e;
       }
     }
@@ -222,5 +225,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`\n🍽️  NutriBite running at http://localhost:${PORT}\n`);
+  console.log(`\n🔍  BiteLens running at http://localhost:${PORT}\n`);
 });

@@ -1,4 +1,4 @@
-// NutriBite scan page: camera scanner, photo upload fallback, AI analysis
+// BiteLens scan page: camera scanner, photo upload fallback, AI analysis
 (() => {
   const $ = (s) => document.querySelector(s);
   const video = $("#video"), canvas = $("#canvas"), camMsg = $("#camMsg"), liveLine = $("#liveLine");

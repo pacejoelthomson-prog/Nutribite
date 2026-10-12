@@ -1,4 +1,4 @@
-// NutriBite progress page: unlimited days of calorie intake
+// BiteLens progress page: unlimited days of calorie intake
 (() => {
   const $ = (s) => document.querySelector(s);
   const goalInput = $("#goal");

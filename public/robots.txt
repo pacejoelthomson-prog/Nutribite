@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# AI assistants & search crawlers explicitly allowed
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Sitemap
+# TODO: update after domain migration
+Sitemap: https://nutribite-cvg1.onrender.com/sitemap.xml

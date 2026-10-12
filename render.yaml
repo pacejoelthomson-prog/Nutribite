@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: nutribite
+    name: nutribite # TODO: update after custom domain migration to bitelens
     runtime: node
     plan: free
     buildCommand: npm install --production
