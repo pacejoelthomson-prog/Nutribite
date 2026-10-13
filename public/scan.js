@@ -15,6 +15,11 @@
   }
   document.querySelectorAll(".seg button").forEach((t) => t.addEventListener("click", () => setTab(t.dataset.tab)));
 
+  const SVG_CAM = `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>`;
+  const SVG_BLOCKED = `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>`;
+  const SVG_WAIT = `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="spin-icon"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>`;
+  const SVG_ALERT = `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+
   function showMsg(icon, text, action) {
     camMsg.hidden = false;
     camMsg.classList.remove("hide");
@@ -24,15 +29,15 @@
     camMsg.querySelector("[data-act=start]")?.addEventListener("click", startCamera);
     camMsg.querySelector("[data-act=upload]")?.addEventListener("click", () => setTab("upload"));
   }
-  const idle = () => showMsg("📸", "Allow camera access to scan your food live.", { key: "start", label: "Start Camera" });
+  const idle = () => showMsg(SVG_CAM, "Allow camera access to scan your food live.", { key: "start", label: "Start Camera" });
 
   async function startCamera() {
     if (!navigator.mediaDevices?.getUserMedia) {
-      showMsg("🚫", "Camera isn't available in this browser (it requires HTTPS or localhost). Please upload a photo instead.", { key: "upload", label: "Upload a Photo" });
+      showMsg(SVG_BLOCKED, "Camera isn't available in this browser (it requires HTTPS or localhost). Please upload a photo instead.", { key: "upload", label: "Upload a Photo" });
       return NB.toast("Camera not available — please upload a photo.", "error");
     }
     stopCamera(true);
-    showMsg("⏳", "Starting camera…");
+    showMsg(SVG_WAIT, "Starting camera…");
 
     // Ensure video element properties for mobile & Safari autoplay
     video.muted = true;
@@ -89,7 +94,7 @@
       setTimeout(revealVideo, 250);
     } catch (err) {
       console.error("Camera access failed:", err);
-      showMsg("😕", `Could not access camera (${err.name || "Access Denied"}). Please check browser permissions or upload a photo.`, { key: "upload", label: "Upload a Photo" });
+      showMsg(SVG_ALERT, `Could not access camera (${err.name || "Access Denied"}). Please check browser permissions or upload a photo.`, { key: "upload", label: "Upload a Photo" });
       NB.toast(`Camera error: ${err.message || err.name || "Denied"}`, "error");
     }
   }
@@ -149,7 +154,7 @@
       location.href = "results.html";
     } catch (err) {
       console.error(err);
-      NB.toast(`⚠️ ${err.message}`, "error");
+      NB.toast(err.message, "error");
       loading.classList.remove("show");
       if (!stream) idle();
     } finally { clearInterval(timer); }

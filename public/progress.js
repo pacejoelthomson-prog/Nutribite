@@ -6,7 +6,7 @@
 
   $("#saveGoal").addEventListener("click", () => {
     const g = Math.max(800, Math.min(6000, Number(goalInput.value) || 2000));
-    NB.setGoal(g); goalInput.value = g; render(); NB.toast(`🎯 Daily goal set to ${g} kcal`);
+    NB.setGoal(g); goalInput.value = g; render(); NB.toast(`Daily goal updated to ${g} kcal`);
   });
   $("#clearBtn").addEventListener("click", () => {
     if (confirm("Clear all logged foods and start again from Day 1?")) { NB.clearAll(); render(); NB.toast("History cleared"); }
@@ -64,9 +64,9 @@
           </div>
         </div>
         <ul class="day-foods">${t.items.length
-          ? t.items.map((e) => `<li><span class="nm">${NB.esc(e.name)}<br><span class="tm">${NB.fmtTime(e.ts)}</span></span><span class="kc">${e.calories} kcal</span><button data-del="${e.id}" title="Remove">✕</button></li>`).join("")
+          ? t.items.map((e) => `<li><span class="nm">${NB.esc(e.name)}<br><span class="tm">${NB.fmtTime(e.ts)}</span></span><span class="kc">${e.calories} kcal</span><button data-del="${e.id}" title="Remove" aria-label="Remove item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></li>`).join("")
           : `<li class="empty">No foods scanned yet</li>`}</ul>
-        ${isToday ? `<a class="day-add" href="scan.html">＋ Scan food for Day ${d}</a>` : ""}`;
+        ${isToday ? `<a class="day-add" href="scan.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px;margin-right:4px"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Scan food for Day ${d}</a>` : ""}`;
       wrap.appendChild(card);
       NB.setRing(card.querySelector(`#r${d}`), t.calories / goal);
       NB.countUp(card.querySelector(`#c${d}`), t.calories);

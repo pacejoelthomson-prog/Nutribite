@@ -147,12 +147,12 @@ const NB = (() => {
     wrap.innerHTML = `
       <div class="ratio-switch-inner" role="toolbar" aria-label="Aspect Ratio Switcher">
         <span class="ratio-label">Ratio:</span>
-        <button class="ratio-btn ${cur === "9-16" ? "active" : ""}" data-ratio="9-16" title="Switch to 9:16 Vertical Mobile View">📱 9:16 Mobile</button>
-        <button class="ratio-btn ${cur === "16-9" ? "active" : ""}" data-ratio="16-9" title="Switch to 16:9 Widescreen Desktop View">💻 16:9 Desktop</button>
-        <button class="ratio-btn ${cur === "auto" ? "active" : ""}" data-ratio="auto" title="Auto Responsive based on screen">🔄 Auto</button>
-        <button class="ratio-toggle-btn" id="ratioToggleBtn" title="Minimize ratio switcher" aria-label="Minimize ratio switcher">✕</button>
+        <button class="ratio-btn ${cur === "9-16" ? "active" : ""}" data-ratio="9-16" title="Switch to 9:16 Vertical Mobile View"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>9:16 Mobile</button>
+        <button class="ratio-btn ${cur === "16-9" ? "active" : ""}" data-ratio="16-9" title="Switch to 16:9 Widescreen Desktop View"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>16:9 Desktop</button>
+        <button class="ratio-btn ${cur === "auto" ? "active" : ""}" data-ratio="auto" title="Auto Responsive based on screen"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>Auto</button>
+        <button class="ratio-toggle-btn" id="ratioToggleBtn" title="Minimize ratio switcher" aria-label="Minimize ratio switcher"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
-      <button class="ratio-mini-btn" id="ratioMiniBtn" title="Switch Aspect Ratio (9:16 / 16:9)" aria-label="Open ratio switcher">📐</button>
+      <button class="ratio-mini-btn" id="ratioMiniBtn" title="Switch Aspect Ratio (9:16 / 16:9)" aria-label="Open ratio switcher"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg></button>
     `;
     document.body.appendChild(wrap);
 
@@ -182,23 +182,28 @@ const NB = (() => {
   function mountChrome(active) {
     const host = document.getElementById("chrome");
     if (!host) return;
-    const link = (href, key, icon, label) =>
+    const link = (href, key, iconSvg, label) =>
       `<a href="${href}" class="nav-item ${active === key ? "active" : ""}" data-nav="${key}">
-        <span class="nav-icon" aria-hidden="true">${icon}</span>
+        <span class="nav-icon" aria-hidden="true">${iconSvg}</span>
         <span class="nav-text">${label}</span>
       </a>`;
+
+    const iconHome = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>`;
+    const iconCamera = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>`;
+    const iconChart = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`;
+
     host.innerHTML = `
-      <div class="powered-bar">⚡ <b>Powered by AI</b> to detect the calories &amp; nutrients of the food in your hands</div>
+      <div class="powered-bar"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:5px;display:inline-block"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><b>Powered by AI</b> to detect the calories &amp; nutrients of the food in your hands</div>
       <div class="nav-wrap"><nav class="nav" id="nav">
-        <a href="index.html" class="logo"><span class="logo-mark">🔍</span>BiteLens</a>
+        <a href="index.html" class="logo"><img src="logo.png" class="logo-mark-img" alt="BiteLens Logo" width="30" height="30" /><span>BiteLens</span></a>
         <div class="nav-links" id="navLinks">
           <span class="nav-glider" id="navGlider" aria-hidden="true"></span>
-          ${link("index.html", "home", "🏠", "Home")}
-          ${link("scan.html", "scan", "📷", "Scan Food")}
-          ${link("progress.html", "progress", "📊", "My Progress")}
+          ${link("index.html", "home", iconHome, "Home")}
+          ${link("scan.html", "scan", iconCamera, "Scan Food")}
+          ${link("progress.html", "progress", iconChart, "My Progress")}
         </div>
-        <a href="scan.html" class="btn btn-dark btn-sm nav-cta">📷 Scan Food</a>
-        <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+        <a href="scan.html" class="btn btn-dark btn-sm nav-cta">${iconCamera} Scan Food</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
       </nav></div>`;
 
     const links = document.getElementById("navLinks");
