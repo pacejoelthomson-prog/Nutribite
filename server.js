@@ -23,7 +23,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY ||
   (process.env.OPENROUTER_API_KEY && (process.env.OPENROUTER_API_KEY.startsWith("AQ.") || process.env.OPENROUTER_API_KEY.startsWith("AIza")) ? process.env.OPENROUTER_API_KEY : null) || 
   BUILTIN_GEMINI_KEY;
 
-const GEMINI_MODELS = (process.env.GEMINI_MODELS || "gemini-3.5-flash,gemini-3.6-flash,gemini-3.1-flash-lite,gemini-flash-latest")
+const GEMINI_MODELS = (process.env.GEMINI_MODELS || "gemini-3-flash-preview,gemini-3.1-flash-lite-preview,gemini-3.1-flash-lite,gemini-3.5-flash-lite")
   .split(",").map((s) => s.trim()).filter(Boolean);
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY && !process.env.OPENROUTER_API_KEY.startsWith("AQ.") ? process.env.OPENROUTER_API_KEY : null;
 const OPENROUTER_MODELS = (process.env.OPENROUTER_MODELS || "google/gemini-2.5-flash,openai/gpt-4o-mini")
@@ -47,18 +47,18 @@ const PROMPT = `You are an elite clinical dietitian and computer vision food ana
 Inspect the food image using expert culinary perception:
 1. Detect all visible ingredients, garnishes, seeds, nuts, and toppings.
 2. Account for hidden calories: accurately estimate absorbed cooking oils, cheese, butter, dressings, sauces, and dough thickness.
-3. Assess 3D plate depth, bowl curvature, and container dimensions to calculate realistic portion weight in grams. DO NOT underestimate calorie-dense meals like pizza, fried chicken, burgers, and curries (e.g., standard pizza portions are 650–900+ kcal, not 250 kcal).
+3. Assess 3D plate depth, bowl curvature, and container dimensions to calculate realistic portion weight in grams. DO NOT underestimate calorie-dense meals.
 4. Calculate precise USDA-standard calories, macros, and key micronutrients.
 Respond ONLY with valid minified JSON (no markdown, no code fences) in this exact shape:
-{"isFood":true,"foodName":"Concise Dish Name","description":"Detailed one-sentence description summarizing the meal","servingSize":"e.g. 1 plate (~450g)","confidence":0-100,
+{"isFood":true,"foodName":"Concise Dish Name","description":"One concise summary sentence","servingSize":"e.g. 1 plate (~380g)","confidence":95,
 "calories":number,
 "macros":{"protein":grams,"carbs":grams,"fat":grams,"fiber":grams,"sugar":grams},
 "micros":[{"name":"Sodium","amount":number,"unit":"mg"},{"name":"Potassium","amount":number,"unit":"mg"},{"name":"Calcium","amount":number,"unit":"mg"},{"name":"Iron","amount":number,"unit":"mg"},{"name":"Vitamin C","amount":number,"unit":"mg"},{"name":"Vitamin A","amount":number,"unit":"µg"},{"name":"Cholesterol","amount":number,"unit":"mg"}],
 "items":[{"name":"string","calories":number}],
 "healthScore":1-10,
-"pros":["3-4 detailed health advantages explaining benefits for muscle, energy, vitamins, and digestion"],
-"cons":["3-4 detailed nutritional watchouts explaining calories, saturated fats, sodium, or glycemic impact"],
-"tips":["2-3 practical, actionable dietitian tips on balance and portion control"]}
+"pros":["Concise health advantage 1","Concise health advantage 2"],
+"cons":["Concise nutritional watchout 1","Concise nutritional watchout 2"],
+"tips":["Concise practical dietitian tip 1","Concise practical dietitian tip 2"]}
 If the image contains no food, respond with {"isFood":false,"message":"short explanation"}.`;
 
 function send(res, status, body, type = "application/json; charset=utf-8") {
@@ -98,44 +98,57 @@ async function analyze(imageDataUrl) {
   // 1. Primary: Direct Google Gemini API with model fallback
   if (GEMINI_API_KEY) {
     for (const model of GEMINI_MODELS) {
-      try {
-        const payload = {
-          contents: [{
-            parts: [
-              { text: PROMPT },
-              { inlineData: { mimeType, data: base64Data } }
-            ]
-          }],
-          generationConfig: {
-            temperature: 0.2,
-            maxOutputTokens: 2500,
-            thinkingConfig: { thinkingBudget: 0 }
-          }
-        };
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          const payload = {
+            contents: [{
+              parts: [
+                { text: PROMPT },
+                { inlineData: { mimeType, data: base64Data } }
+              ]
+            }],
+            generationConfig: {
+              temperature: 0.1,
+              maxOutputTokens: 1500,
+              thinkingConfig: { thinkingBudget: 0 }
+            }
+          };
 
-        console.log(`[BiteLens] Analyzing food image with model: ${model}`);
-        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          signal: AbortSignal.timeout(20000),
-          body: JSON.stringify(payload)
-        });
-        const data = await r.json().catch(() => ({}));
-        if (!r.ok) {
-          const errMsg = data?.error?.message || `Gemini error ${r.status}`;
-          if (r.status === 503) {
-            await new Promise((resolve) => setTimeout(resolve, 700));
+          console.log(`[BiteLens] Analyzing food image with model: ${model} (attempt ${attempt})`);
+          const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            signal: AbortSignal.timeout(11000),
+            body: JSON.stringify(payload)
+          });
+          const data = await r.json().catch(() => ({}));
+          if (!r.ok) {
+            const errMsg = data?.error?.message || `Gemini error ${r.status}`;
+            if (r.status === 429) {
+              console.warn(`[BiteLens] ${model} 429 quota exhausted, skipping immediately...`);
+              break; // skip to next model immediately
+            }
+            if (r.status === 503 && attempt === 1) {
+              console.warn(`[BiteLens] ${model} 503 high demand spike, backing off 500ms...`);
+              await new Promise((resolve) => setTimeout(resolve, 500));
+              continue; // retry this model once
+            }
+            throw new Error(errMsg);
           }
-          throw new Error(errMsg);
+          const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          const result = extractJson(text);
+          result.model = `Google Gemini (${model})`;
+          console.log(`[BiteLens] Successfully analyzed with ${model}`);
+          return result;
+        } catch (e) {
+          console.warn(`[BiteLens] Gemini model ${model} attempt ${attempt} failed: ${e.message}`);
+          lastErr = e;
+          if (attempt === 1 && e.message && e.message.includes("503")) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            continue;
+          }
+          break; // move to next model
         }
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        const result = extractJson(text);
-        result.model = `Google Gemini (${model})`;
-        console.log(`[BiteLens] Successfully analyzed with ${model}`);
-        return result;
-      } catch (e) {
-        console.warn(`[BiteLens] Gemini model ${model} failed: ${e.message}`);
-        lastErr = e;
       }
     }
   }
