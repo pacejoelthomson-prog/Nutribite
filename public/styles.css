@@ -588,7 +588,7 @@ section { padding: 90px 0; }
 .donut-legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: var(--c); }
 
 /* FAQ */
-.faq { display: grid; grid-template-columns: .85fr 1.15fr; gap: 50px; align-items: start; }
+.faq { max-width: 860px; margin: 0 auto; }
 .faq-photo { border-radius: var(--radius); overflow: hidden; aspect-ratio: 3/3.6; position: relative; }
 .faq-photo img { width: 100%; height: 100%; object-fit: cover; }
 .faq-photo .badge-float { position: absolute; left: 16px; bottom: 16px; background: #fff; border-radius: 14px; padding: 10px 14px; box-shadow: var(--shadow); font-size: .75rem; color: var(--muted); }
