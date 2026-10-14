@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <link rel="stylesheet" href="styles.css?v=2.2" />
+  <link rel="stylesheet" href="styles.css?v=2.3" />
   <script>document.documentElement.classList.add('js');</script>
   <!-- JSON-LD Structured Data for Google Search -->
   <script type="application/ld+json">
@@ -47,7 +47,18 @@
     <canvas id="bg3d" class="hero-bg-canvas" aria-hidden="true"></canvas>
     <div class="container hero">
       <div class="hero-text reveal">
-        <h1>Reimagine eating,<br /><span class="typewriter-wrap"><span class="typewriter-text" id="typewriter">simple nutrition.</span><span class="typewriter-cursor" aria-hidden="true"></span></span></h1>
+        <h1>Reimagine eating,<br />
+          <span class="focus-container" id="trueFocus" style="--border-color:#16a34a; --glow-color:rgba(34,197,94,0.6);" aria-label="simple nutrition.">
+            <span class="focus-word active" data-index="0">simple</span>
+            <span class="focus-word" data-index="1" style="filter: blur(5px);">nutrition.</span>
+            <span class="focus-frame" id="focusFrame" aria-hidden="true">
+              <span class="corner top-left"></span>
+              <span class="corner top-right"></span>
+              <span class="corner bottom-left"></span>
+              <span class="corner bottom-right"></span>
+            </span>
+          </span>
+        </h1>
         <p class="lead">Point your camera at any meal. BiteLens's AI instantly shows calories, nutrients, advantages and disadvantages — and tracks your intake day by day.</p>
         <div class="hero-cta">
           <a href="scan.html" class="btn btn-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>Scan Your Food</a>
@@ -329,43 +340,87 @@
       move();
     }
 
-    /* Continuous looping typewriter effect for "simple nutrition." */
-    (function () {
-      const tw = document.getElementById("typewriter");
-      if (!tw) return;
-      const targetText = "simple nutrition.";
-      tw.textContent = "";
-      let charIdx = 0;
-      let isDeleting = false;
+    /* TrueFocus Component from React Bits */
+    (function initTrueFocus() {
+      const container = document.getElementById("trueFocus");
+      const frame = document.getElementById("focusFrame");
+      if (!container || !frame) return;
 
-      function step() {
-        if (!isDeleting) {
-          // Type characters forward
-          charIdx++;
-          tw.textContent = targetText.slice(0, charIdx);
-          if (charIdx === targetText.length) {
-            // Done typing! Wait 1.5 seconds as requested by user
-            isDeleting = true;
-            setTimeout(step, 1500);
-            return;
+      const words = Array.from(container.querySelectorAll(".focus-word"));
+      if (!words.length) return;
+
+      const blurAmount = 5;
+      const animationDuration = 0.5;
+      const pauseBetweenAnimations = 1;
+      let currentIndex = 0;
+      let autoTimer = null;
+      let isHovered = false;
+
+      function updateFocus(index) {
+        if (index < 0 || index >= words.length) return;
+        currentIndex = index;
+
+        words.forEach((w, i) => {
+          if (i === currentIndex) {
+            w.classList.add("active");
+            w.style.filter = "blur(0px)";
+          } else {
+            w.classList.remove("active");
+            w.style.filter = `blur(${blurAmount}px)`;
           }
-          setTimeout(step, 85);
-        } else {
-          // Smooth backspace erasing
-          charIdx--;
-          tw.textContent = targetText.slice(0, charIdx);
-          if (charIdx === 0) {
-            // Finished erasing, small pause before typing again
-            isDeleting = false;
-            setTimeout(step, 350);
-            return;
-          }
-          setTimeout(step, 45);
+        });
+
+        const activeWord = words[currentIndex];
+        const parentRect = container.getBoundingClientRect();
+        const activeRect = activeWord.getBoundingClientRect();
+
+        const x = activeRect.left - parentRect.left;
+        const y = activeRect.top - parentRect.top;
+        const width = activeRect.width;
+        const height = activeRect.height;
+
+        frame.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        frame.style.width = `${width}px`;
+        frame.style.height = `${height}px`;
+        frame.style.opacity = "1";
+      }
+
+      function startAuto() {
+        stopAuto();
+        autoTimer = setInterval(() => {
+          if (isHovered) return;
+          const next = (currentIndex + 1) % words.length;
+          updateFocus(next);
+        }, (animationDuration + pauseBetweenAnimations) * 1000);
+      }
+
+      function stopAuto() {
+        if (autoTimer) {
+          clearInterval(autoTimer);
+          autoTimer = null;
         }
       }
 
-      // Initial start delay on page load
-      setTimeout(step, 350);
+      words.forEach((w, i) => {
+        w.addEventListener("mouseenter", () => {
+          isHovered = true;
+          updateFocus(i);
+        });
+        w.addEventListener("mouseleave", () => {
+          isHovered = false;
+        });
+      });
+
+      // Initial focus once rendered
+      requestAnimationFrame(() => {
+        updateFocus(0);
+        startAuto();
+      });
+
+      window.addEventListener("resize", () => updateFocus(currentIndex));
+      if (document.fonts) {
+        document.fonts.ready.then(() => updateFocus(currentIndex));
+      }
     })();
   </script>
 </body>
