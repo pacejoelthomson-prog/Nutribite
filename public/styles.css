@@ -464,14 +464,15 @@ section { padding: 90px 0; }
   justify-content: center;
   align-items: baseline;
   flex-wrap: wrap;
-  column-gap: 0.20em;
-  row-gap: 0.15em;
+  column-gap: 0.12em;
+  row-gap: 0.08em;
 }
 
 .staggered-text .stagger-segment {
   display: inline-block;
   white-space: nowrap;
   margin: 0;
+  padding: 0;
   will-change: transform, opacity, filter;
   opacity: 0;
   transform: translate3d(0, 24px, 0);
