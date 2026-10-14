@@ -453,6 +453,116 @@ section { padding: 90px 0; }
   margin-top: 14px;
 }
 
+/* ---------- ScrollStack Component (React Bits) ---------- */
+.scroll-stack {
+  position: relative;
+  width: 100%;
+}
+
+#showcaseScrollStack {
+  --stack-top: 96px;
+  --stack-dist: 24px;
+}
+
+.scroll-stack--window {
+  /* window-level scrolling stack */
+}
+
+.scroll-stack__inner {
+  position: relative;
+  width: 100%;
+}
+
+.scroll-stack__slot {
+  position: sticky;
+  width: 100%;
+  will-change: top;
+}
+
+.scroll-stack-card {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 36px;
+  background: #ffffff;
+  color: var(--ink);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 -14px 45px -18px rgba(0, 0, 0, 0.16),
+    0 28px 65px -24px rgba(16, 24, 40, 0.22);
+  transform-origin: 50% 0;
+  will-change: transform;
+  overflow: hidden;
+  margin-bottom: 0 !important;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.scroll-stack-card:hover {
+  /* Prevent hover transform from fighting JS scroll stacking */
+  transform: none;
+  box-shadow: 0 38px 85px -28px rgba(16, 24, 40, 0.22), 0 2px 6px rgba(16, 24, 40, 0.05);
+  border-color: #d1d5db;
+}
+
+.scroll-stack-card__shade {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #0c0d10;
+  opacity: var(--scroll-stack-dim, 0);
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.15s ease;
+}
+
+.scroll-stack__end {
+  height: 220px;
+}
+
+html.js .scroll-stack-card,
+html.js .scroll-stack-card.in {
+  opacity: 1 !important;
+}
+html.js .scroll-stack-card .showcase-copy,
+html.js .scroll-stack-card.in .showcase-copy,
+html.js .scroll-stack-card .showcase-visual,
+html.js .scroll-stack-card.in .showcase-visual {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+@media (max-width: 860px) {
+  #showcaseScrollStack {
+    --stack-top: 74px;
+    --stack-dist: 16px;
+  }
+  .scroll-stack-card {
+    border-radius: 24px;
+  }
+  .scroll-stack__end {
+    height: 140px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-stack__slot {
+    position: static !important;
+    top: auto !important;
+    margin-bottom: 36px !important;
+  }
+  .scroll-stack-card {
+    transform: none !important;
+    filter: none !important;
+  }
+  .scroll-stack-card__shade {
+    display: none !important;
+  }
+  .scroll-stack__gap,
+  .scroll-stack__end {
+    display: none !important;
+  }
+}
+
 /* Individual Showcase Blocks with Progressive Sizing */
 .showcase-card {
   position: relative;

@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <link rel="stylesheet" href="styles.css?v=2.3" />
+  <link rel="stylesheet" href="styles.css?v=2.4" />
   <script>document.documentElement.classList.add('js');</script>
   <!-- JSON-LD Structured Data for Google Search -->
   <script type="application/ld+json">
@@ -145,74 +145,97 @@
         <p class="sec-subtitle">Experience instant food detection, transparent pros &amp; cons, and continuous daily calorie tracking—all powered by modern AI vision in the palm of your hand.</p>
       </div>
 
-      <!-- BLOCK 1: SCAN IN SECONDS (Image 1) -->
-      <article class="showcase-card showcase-block-1 reveal-card" data-block="1">
-        <div class="showcase-inner">
-          <div class="showcase-copy">
-            <span class="block-tag tag-green"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:4px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>01 · Instant Detection</span>
-            <h3>Scan in seconds</h3>
-            <p class="block-desc">Point your phone camera at any plate. Our vision AI instantly isolates every item on your plate, calculates the portion size, and returns total calories, macros, and nutrients before your food gets cold.</p>
-            <ul class="block-points">
-              <li><span class="point-check check-green">✓</span> Real-time camera viewfinder with smart auto-framing</li>
-              <li><span class="point-check check-green">✓</span> Quick photo upload fallback whenever camera isn't available</li>
-              <li><span class="point-check check-green">✓</span> Full calories, macros &amp; micronutrients tracked in ~3s</li>
-            </ul>
-            <a href="scan.html" class="btn btn-dark block-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>Scan Your Food Now →</a>
-          </div>
-          <div class="showcase-visual">
-            <span class="showcase-glow glow-green" aria-hidden="true"></span>
-            <div class="showcase-frame" data-parallax="26">
-              <img src="showcase-scan.jpg" alt="Hand holding phone scanning grilled chicken with quinoa and vegetables, displaying food detected nutritional panel" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </article>
+      <!-- ScrollStack Component (React Bits) -->
+      <div class="scroll-stack scroll-stack--window" id="showcaseScrollStack">
+        <div class="scroll-stack__inner" id="scrollStackInner">
 
-      <!-- BLOCK 2: ADVANTAGES & DISADVANTAGES (Image 2, Reversed) -->
-      <article class="showcase-card showcase-block-2 reveal-card reverse" data-block="2">
-        <div class="showcase-inner">
-          <div class="showcase-copy">
-            <span class="block-tag tag-dual"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><path d="M3 6l9-4 9 4v2H3V6z"></path><path d="M12 2v20"></path><path d="M5 22h14"></path></svg>02 · Honest Feedback</span>
-            <h3>Advantages &amp; disadvantages</h3>
-            <p class="block-desc">Nutrition isn't one-sided. Every scan generates an honest, unbiased breakdown of the pros and cons of your meal—celebrating lean protein and vitamins while flagging hidden sodium, heavy oils, or excess sugars.</p>
-            <ul class="block-points">
-              <li><span class="point-check check-dual">✓</span> Clear health advantages: fiber, protein density &amp; vitality</li>
-              <li><span class="point-check check-dual">✓</span> Mindful watchouts: sodium peaks, dressing oils &amp; high calories</li>
-              <li><span class="point-check check-dual">✓</span> Actionable dietitian tips tailored to your specific portion</li>
-            </ul>
-            <a href="scan.html" class="btn btn-dark block-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M3 6l9-4 9 4v2H3V6z"></path><path d="M12 2v20"></path><path d="M5 22h14"></path></svg>See Pros &amp; Cons on Your Food →</a>
+          <!-- SLOT 1: SCAN IN SECONDS -->
+          <div data-stack-slot="" class="scroll-stack__slot" style="top: var(--stack-top, 96px); margin-bottom: calc(var(--stack-dist, 24px) * 2); z-index: 1;">
+            <article class="showcase-card showcase-block-1 scroll-stack-card" data-block="1">
+              <div class="showcase-inner">
+                <div class="showcase-copy">
+                  <span class="block-tag tag-green"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:4px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>01 · Instant Detection</span>
+                  <h3>Scan in seconds</h3>
+                  <p class="block-desc">Point your phone camera at any plate. Our vision AI instantly isolates every item on your plate, calculates the portion size, and returns total calories, macros, and nutrients before your food gets cold.</p>
+                  <ul class="block-points">
+                    <li><span class="point-check check-green">✓</span> Real-time camera viewfinder with smart auto-framing</li>
+                    <li><span class="point-check check-green">✓</span> Quick photo upload fallback whenever camera isn't available</li>
+                    <li><span class="point-check check-green">✓</span> Full calories, macros &amp; micronutrients tracked in ~3s</li>
+                  </ul>
+                  <a href="scan.html" class="btn btn-dark block-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>Scan Your Food Now →</a>
+                </div>
+                <div class="showcase-visual">
+                  <span class="showcase-glow glow-green" aria-hidden="true"></span>
+                  <div class="showcase-frame" data-parallax="26">
+                    <img src="showcase-scan.jpg" alt="Hand holding phone scanning grilled chicken with quinoa and vegetables, displaying food detected nutritional panel" loading="lazy" />
+                  </div>
+                </div>
+              </div>
+              <span class="scroll-stack-card__shade" aria-hidden="true"></span>
+            </article>
           </div>
-          <div class="showcase-visual">
-            <span class="showcase-glow glow-dual" aria-hidden="true"></span>
-            <div class="showcase-frame" data-parallax="-26">
-              <img src="showcase-proscons.jpg" alt="Smartphone displaying chicken salad scan with green advantages and red disadvantages panels" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </article>
 
-      <!-- BLOCK 3: DAY TO DAY PROGRESS (Image 3) -->
-      <article class="showcase-card showcase-block-3 reveal-card" data-block="3">
-        <div class="showcase-inner">
-          <div class="showcase-copy">
-            <span class="block-tag tag-blue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>03 · Lifelong Tracking</span>
-            <h3>Day to day progress</h3>
-            <p class="block-desc">BiteLens isn't a temporary 3-day challenge. It's built for your daily life. Every food you scan is automatically attributed to Day 1, Day 2, Day 3, Day 4, and beyond—with visual goal rings and weekly bar charts.</p>
-            <ul class="block-points">
-              <li><span class="point-check check-blue">✓</span> Continuous Day 1, Day 2, Day 3… logging without reset</li>
-              <li><span class="point-check check-blue">✓</span> Custom daily calorie targets with visual progress rings</li>
-              <li><span class="point-check check-blue">✓</span> Interactive 7-day bar chart with your target goal line</li>
-            </ul>
-            <a href="progress.html" class="btn btn-dark block-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>View Your Daily Progress →</a>
+          <!-- Gap between card 1 and card 2 -->
+          <div aria-hidden="true" class="scroll-stack__gap" style="height: 100px;"></div>
+
+          <!-- SLOT 2: ADVANTAGES & DISADVANTAGES -->
+          <div data-stack-slot="" class="scroll-stack__slot" style="top: calc(var(--stack-top, 96px) + var(--stack-dist, 24px)); margin-bottom: var(--stack-dist, 24px); z-index: 2;">
+            <article class="showcase-card showcase-block-2 scroll-stack-card reverse" data-block="2">
+              <div class="showcase-inner">
+                <div class="showcase-copy">
+                  <span class="block-tag tag-dual"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><path d="M3 6l9-4 9 4v2H3V6z"></path><path d="M12 2v20"></path><path d="M5 22h14"></path></svg>02 · Honest Feedback</span>
+                  <h3>Advantages &amp; disadvantages</h3>
+                  <p class="block-desc">Nutrition isn't one-sided. Every scan generates an honest, unbiased breakdown of the pros and cons of your meal—celebrating lean protein and vitamins while flagging hidden sodium, heavy oils, or excess sugars.</p>
+                  <ul class="block-points">
+                    <li><span class="point-check check-dual">✓</span> Clear health advantages: fiber, protein density &amp; vitality</li>
+                    <li><span class="point-check check-dual">✓</span> Mindful watchouts: sodium peaks, dressing oils &amp; high calories</li>
+                    <li><span class="point-check check-dual">✓</span> Actionable dietitian tips tailored to your specific portion</li>
+                  </ul>
+                  <a href="scan.html" class="btn btn-dark block-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M3 6l9-4 9 4v2H3V6z"></path><path d="M12 2v20"></path><path d="M5 22h14"></path></svg>See Pros &amp; Cons on Your Food →</a>
+                </div>
+                <div class="showcase-visual">
+                  <span class="showcase-glow glow-dual" aria-hidden="true"></span>
+                  <div class="showcase-frame" data-parallax="-26">
+                    <img src="showcase-proscons.jpg" alt="Smartphone displaying chicken salad scan with green advantages and red disadvantages panels" loading="lazy" />
+                  </div>
+                </div>
+              </div>
+              <span class="scroll-stack-card__shade" aria-hidden="true"></span>
+            </article>
           </div>
-          <div class="showcase-visual">
-            <span class="showcase-glow glow-blue" aria-hidden="true"></span>
-            <div class="showcase-frame" data-parallax="28">
-              <img src="showcase-progress.png" alt="Smartphone on table showing Day 1 and Day 2 calorie rings with daily progress weekly overview" loading="lazy" />
-            </div>
+
+          <!-- Gap between card 2 and card 3 -->
+          <div aria-hidden="true" class="scroll-stack__gap" style="height: 100px;"></div>
+
+          <!-- SLOT 3: DAY TO DAY PROGRESS -->
+          <div data-stack-slot="" class="scroll-stack__slot" style="top: calc(var(--stack-top, 96px) + var(--stack-dist, 24px) * 2); margin-bottom: 0px; z-index: 3;">
+            <article class="showcase-card showcase-block-3 scroll-stack-card" data-block="3">
+              <div class="showcase-inner">
+                <div class="showcase-copy">
+                  <span class="block-tag tag-blue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>03 · Lifelong Tracking</span>
+                  <h3>Day to day progress</h3>
+                  <p class="block-desc">BiteLens isn't a temporary 3-day challenge. It's built for your daily life. Every food you scan is automatically attributed to Day 1, Day 2, Day 3, Day 4, and beyond—with visual goal rings and weekly bar charts.</p>
+                  <ul class="block-points">
+                    <li><span class="point-check check-blue">✓</span> Continuous Day 1, Day 2, Day 3… logging without reset</li>
+                    <li><span class="point-check check-blue">✓</span> Custom daily calorie targets with visual progress rings</li>
+                    <li><span class="point-check check-blue">✓</span> Interactive 7-day bar chart with your target goal line</li>
+                  </ul>
+                  <a href="progress.html" class="btn btn-dark block-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>View Your Daily Progress →</a>
+                </div>
+                <div class="showcase-visual">
+                  <span class="showcase-glow glow-blue" aria-hidden="true"></span>
+                  <div class="showcase-frame" data-parallax="28">
+                    <img src="showcase-progress.png" alt="Smartphone on table showing Day 1 and Day 2 calorie rings with daily progress weekly overview" loading="lazy" />
+                  </div>
+                </div>
+              </div>
+              <span class="scroll-stack-card__shade" aria-hidden="true"></span>
+            </article>
           </div>
+
+          <div class="scroll-stack__end" id="scrollStackEnd" style="height: 220px;" aria-hidden="true"></div>
         </div>
-      </article>
+      </div>
     </div>
   </section>
 
@@ -421,6 +444,83 @@
       if (document.fonts) {
         document.fonts.ready.then(() => updateFocus(currentIndex));
       }
+    })();
+
+    /* ScrollStack Component (React Bits) */
+    (function initScrollStack() {
+      const root = document.getElementById("showcaseScrollStack");
+      const inner = document.getElementById("scrollStackInner");
+      const end = document.getElementById("scrollStackEnd");
+      if (!root || !inner || !end) return;
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const getSettings = () => {
+        const isMobile = window.innerWidth <= 860;
+        return {
+          itemDistance: isMobile ? 60 : 100,
+          itemStackDistance: isMobile ? 16 : 24,
+          stackPosition: isMobile ? 74 : 96,
+          itemScale: 0.045,
+          baseScale: 0.88,
+          dimAmount: 0.18,
+          holdDistance: isMobile ? 140 : 220
+        };
+      };
+
+      let settings = getSettings();
+      let frame = 0;
+      const cache = new Map();
+      const write = (key, value, apply) => {
+        if (cache.get(key) === value) return false;
+        cache.set(key, value);
+        apply(value);
+        return true;
+      };
+
+      const update = () => {
+        frame = 0;
+        const slots = Array.from(inner.children).filter((c) => c.hasAttribute("data-stack-slot"));
+        if (!slots.length) return;
+
+        const stackTop = settings.stackPosition;
+        const offset = settings.itemStackDistance;
+        const heights = slots.map((s) => s.offsetHeight);
+        const tops = slots.map((s) => s.getBoundingClientRect().top);
+
+        const depths = slots.map(() => 0);
+        for (let j = 1; j < slots.length; j++) {
+          const pinBefore = stackTop + (j - 1) * offset;
+          const start = pinBefore + heights[j - 1];
+          const span = Math.max(1, start - pinBefore - offset);
+          const cover = Math.min(1, Math.max(0, (start - tops[j]) / span));
+          for (let i = 0; i < j; i++) depths[i] += cover;
+        }
+
+        const dimStep = Math.min(Math.max(settings.dimAmount, 0), 1);
+        slots.forEach((slot, i) => {
+          const card = slot.querySelector(".scroll-stack-card");
+          if (!card) return;
+          const depth = depths[i];
+          const scale = Math.max(settings.baseScale, 1 - depth * settings.itemScale);
+          const dim = 1 - Math.pow(1 - dimStep, depth);
+          const transform = depth < 0.0005 ? "" : `perspective(1200px) scale(${scale.toFixed(4)})`;
+
+          write(`transform${i}`, transform, (v) => { card.style.transform = v; });
+          write(`dim${i}`, dim.toFixed(3), (v) => { card.style.setProperty("--scroll-stack-dim", v); });
+        });
+      };
+
+      const schedule = () => {
+        if (!frame) frame = requestAnimationFrame(update);
+      };
+
+      window.addEventListener("scroll", schedule, { passive: true });
+      window.addEventListener("resize", () => {
+        settings = getSettings();
+        schedule();
+      });
+      schedule();
     })();
   </script>
 </body>
