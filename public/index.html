@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <link rel="stylesheet" href="styles.css?v=2.4" />
+  <link rel="stylesheet" href="styles.css?v=2.5" />
   <script>document.documentElement.classList.add('js');</script>
   <!-- JSON-LD Structured Data for Google Search -->
   <script type="application/ld+json">
@@ -139,10 +139,24 @@
   <!-- ============ BIG IMPACT SCROLL-ANIMATED SHOWCASE BLOCKS ============ -->
   <section class="showcase-section" id="showcase">
     <div class="container">
-      <div class="showcase-header reveal">
-        <span class="showcase-pill"><span class="pill-dot"></span> Next-Gen Nutrition AI</span>
-        <h2 class="sec-title">Everything you need to understand<br />your food and more</h2>
-        <p class="sec-subtitle">Experience instant food detection, transparent pros &amp; cons, and continuous daily calorie tracking—all powered by modern AI vision in the palm of your hand.</p>
+      <div class="showcase-header">
+        <span class="showcase-pill reveal"><span class="pill-dot"></span> Next-Gen Nutrition AI</span>
+        <h2 class="sec-title staggered-text" id="staggeredShowcaseTitle" aria-label="Everything you need to understand your food and more">
+          <span class="stagger-line">
+            <span class="stagger-segment" style="--stagger-delay: 0s;">Everything</span>
+            <span class="stagger-segment" style="--stagger-delay: 0.08s;">you</span>
+            <span class="stagger-segment" style="--stagger-delay: 0.16s;">need</span>
+            <span class="stagger-segment" style="--stagger-delay: 0.24s;">to</span>
+            <span class="stagger-segment" style="--stagger-delay: 0.32s;">understand</span>
+          </span>
+          <span class="stagger-line">
+            <span class="stagger-segment" style="--stagger-delay: 0.40s;">your</span>
+            <span class="stagger-segment" style="--stagger-delay: 0.48s;">food</span>
+            <span class="stagger-segment" style="--stagger-delay: 0.56s;">and</span>
+            <span class="stagger-segment" style="--stagger-delay: 0.64s;">more</span>
+          </span>
+        </h2>
+        <p class="sec-subtitle reveal">Experience instant food detection, transparent pros &amp; cons, and continuous daily calorie tracking—all powered by modern AI vision in the palm of your hand.</p>
       </div>
 
       <!-- ScrollStack Component (React Bits) -->
@@ -521,6 +535,41 @@
         schedule();
       });
       schedule();
+    })();
+
+    /* Staggered Text Component (React Bits Pro) */
+    (function initStaggeredText() {
+      const elements = document.querySelectorAll(".staggered-text");
+      if (!elements.length) return;
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      elements.forEach((container) => {
+        const segments = container.querySelectorAll(".stagger-segment");
+        if (reduceMotion) {
+          container.classList.add("in");
+          return;
+        }
+
+        const delay = parseFloat(container.dataset.staggerDelay || "0.08");
+        segments.forEach((seg, i) => {
+          if (!seg.style.getPropertyValue("--stagger-delay")) {
+            seg.style.setProperty("--stagger-delay", `${(i * delay).toFixed(2)}s`);
+          }
+        });
+
+        const threshold = parseFloat(container.dataset.staggerThreshold || "0.15");
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              container.classList.add("in");
+              observer.unobserve(container);
+            }
+          });
+        }, { threshold, rootMargin: "0px 0px -40px 0px" });
+
+        observer.observe(container);
+      });
     })();
   </script>
 </body>
