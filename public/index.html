@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <link rel="stylesheet" href="styles.css?v=2.7" />
+  <link rel="stylesheet" href="styles.css?v=3.5" />
   <script>document.documentElement.classList.add('js');</script>
   <!-- JSON-LD Structured Data for Google Search -->
   <script type="application/ld+json">
@@ -247,12 +247,12 @@
       <div>
         <div class="stat reveal">
           <small>Nutrients per scan</small>
-          <strong><span class="count-up-text" data-from="0" data-to="12" data-suffix="+" data-duration="1.4" data-easing="easeOut" data-mode="count" data-replay-on-hover="true">12+</span></strong>
+          <strong><span class="count-up-text" data-from="0" data-to="12" data-suffix="+" data-duration="1.6" data-delay="0.35" data-easing="easeOut" data-mode="roll" data-replay-on-hover="true">12+</span></strong>
           <p>Calories, macros, fiber, sugar, vitamins and minerals for the portion you're holding.</p>
         </div>
         <div class="stat reveal">
           <small>Analysis time</small>
-          <strong><span class="count-up-text" data-from="0" data-to="5" data-prefix="~" data-suffix="s" data-duration="1.2" data-easing="easeOut" data-mode="count" data-replay-on-hover="true">~5s</span></strong>
+          <strong><span class="count-up-text" data-from="0" data-to="5" data-prefix="~" data-suffix="s" data-duration="1.4" data-delay="0.45" data-easing="easeOut" data-mode="roll" data-replay-on-hover="true">~5s</span></strong>
           <p>Our vision AI identifies each item and estimates the portion size instantly.</p>
         </div>
         <div class="stat reveal"><small>Days you can track</small><strong>Unlimited</strong><p>Not a challenge, just a daily habit. Keep going for as long as you like.</p></div>
@@ -329,8 +329,8 @@
   </div></footer>
 
   <script src="bg3d.js"></script>
-  <script src="countup.js"></script>
-  <script src="common.js"></script>
+  <script src="countup.js?v=3.5"></script>
+  <script src="common.js?v=3.5"></script>
   <script>
     NB.mountChrome("home");
 
@@ -568,6 +568,13 @@
 
         observer.observe(container);
       });
+    })();
+
+    /* CountUp Component (React Bits) */
+    (function initCountUp() {
+      if (window.CountUp && window.CountUp.init) {
+        window.CountUp.init();
+      }
     })();
   </script>
 </body>

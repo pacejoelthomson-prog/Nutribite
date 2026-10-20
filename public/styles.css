@@ -812,7 +812,8 @@ html.js .scroll-stack-card.in .showcase-visual {
   cursor: pointer;
   transition: transform 0.25s cubic-bezier(0.33, 1, 0.68, 1), color 0.25s ease;
 }
-.stat:hover .count-up-text {
+.stat:hover .count-up-text,
+.stat:active .count-up-text {
   color: var(--green);
 }
 .count-up-text {
@@ -820,6 +821,34 @@ html.js .scroll-stack-card.in .showcase-visual {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
   user-select: none;
+}
+.countup-roll-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: pre;
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+.countup-slot {
+  display: inline-block;
+  height: 1.18em;
+  line-height: 1.18em;
+  overflow: hidden;
+  vertical-align: baseline;
+  position: relative;
+}
+.countup-strip {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+.countup-pulse {
+  animation: countUpPulse 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+}
+@keyframes countUpPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); color: var(--green); }
+  100% { transform: scale(1); }
 }
 .stat p { color: var(--muted); font-size: .92rem; max-width: 280px; }
 .stats-photo { position: relative; border-radius: var(--radius); overflow: hidden; background: #e9ebee; aspect-ratio: 4/3.2; }

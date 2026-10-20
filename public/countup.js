@@ -1,6 +1,7 @@
 /**
- * CountUp Component (React Bits) - Vanilla JS implementation
- * Matching exact motion/react easing, count & roll modes, format, and hover replays.
+ * CountUp Component (React Bits) - JavaScript + CSS implementation
+ * Supporting both "count" and "roll" (odometer) modes, exact motion/react easeOut curves,
+ * view triggers, and interactive hover / tap replays.
  */
 (function (global) {
   'use strict';
@@ -20,7 +21,6 @@
 
     function solveX(x) {
       let t = x;
-      // Newton-Raphson
       for (let i = 0; i < 8; i++) {
         const err = sampleX(t) - x;
         if (Math.abs(err) < 1e-5) return t;
@@ -28,7 +28,6 @@
         if (Math.abs(d) < 1e-5) break;
         t -= err / d;
       }
-      // Binary search fallback
       let t0 = 0, t1 = 1;
       t = x;
       while (t0 < t1) {
@@ -124,30 +123,31 @@
     return (opts.prefix || '') + body + scale.label + (opts.suffix || '');
   }
 
+  const mod10 = function (v) { return ((v % 10) + 10) % 10; };
+
   // --- Main CountUp Instance Controller ---
   function createCountUp(el, userOpts) {
     if (!el) return null;
     if (el._countUpInstance) return el._countUpInstance;
 
-    // Parse options from attributes or userOpts
     const ds = el.dataset;
     const to = parseFloat(userOpts && userOpts.to !== undefined ? userOpts.to : ds.to);
     if (isNaN(to)) return null;
 
     const from = parseFloat(userOpts && userOpts.from !== undefined ? userOpts.from : (ds.from || '0'));
     const direction = (userOpts && userOpts.direction) || ds.direction || 'up';
-    const duration = parseFloat((userOpts && userOpts.duration) || ds.duration || '1.4');
-    const delay = parseFloat((userOpts && userOpts.delay) || ds.delay || '0');
+    const duration = parseFloat((userOpts && userOpts.duration) || ds.duration || '1.6');
+    const delay = parseFloat((userOpts && userOpts.delay) || ds.delay || '0.35');
     const separator = (userOpts && userOpts.separator !== undefined) ? userOpts.separator : (ds.separator !== undefined ? ds.separator : '');
     const prefix = (userOpts && userOpts.prefix !== undefined) ? userOpts.prefix : (ds.prefix || '');
     const suffix = (userOpts && userOpts.suffix !== undefined) ? userOpts.suffix : (ds.suffix || '');
     const easingKey = (userOpts && userOpts.easing) || ds.easing || 'easeOut';
-    const mode = (userOpts && userOpts.mode) || ds.mode || 'count';
+    const mode = (userOpts && userOpts.mode) || ds.mode || 'roll';
     const format = (userOpts && userOpts.format) || ds.format || 'standard';
     const trigger = (userOpts && userOpts.trigger) || ds.trigger || 'view';
     const replayOnHover = (userOpts && userOpts.replayOnHover !== undefined)
       ? userOpts.replayOnHover
-      : (ds.replayOnHover === 'true' || ds.replay === 'true' || el.hasAttribute('data-replay-on-hover'));
+      : (ds.replayOnHover === 'true' || ds.replay === 'true' || el.hasAttribute('data-replay-on-hover') || true);
     const decimals = (userOpts && userOpts.decimals !== undefined)
       ? userOpts.decimals
       : (ds.decimals !== undefined ? parseInt(ds.decimals, 10) : undefined);
@@ -156,7 +156,7 @@
       from: isNaN(from) ? 0 : from,
       to: to,
       direction: direction,
-      duration: Math.max(0.1, duration),
+      duration: Math.max(0.2, duration),
       delay: Math.max(0, delay),
       separator: separator,
       prefix: prefix,
@@ -177,17 +177,92 @@
     let hasStarted = false;
     let rafId = null;
 
-    // Apply tabular-nums styling & class
     el.classList.add('count-up-text');
     el.style.fontVariantNumeric = 'tabular-nums';
 
-    // Store final text for accessibility
     const finalText = formatValue(endVal, opts);
-    if (!el.getAttribute('aria-label')) {
-      el.setAttribute('aria-label', finalText);
+    el.setAttribute('aria-label', finalText);
+
+    // --- ROLL MODE (Odometer Columns) ---
+    const CELL_EM = 1.18;
+    let rollColumns = [];
+
+    function setupRollDOM() {
+      const sa = String(Math.abs(Math.round(startVal)));
+      const sb = String(Math.abs(Math.round(endVal)));
+      const len = Math.max(sa.length, sb.length);
+      const padA = sa.padStart(len, '0');
+      const padB = sb.padStart(len, '0');
+
+      rollColumns = [];
+      el.innerHTML = '';
+
+      const wrap = document.createElement('span');
+      wrap.className = 'countup-roll-wrap';
+      wrap.setAttribute('aria-hidden', 'true');
+      wrap.style.cssText = 'display:inline-flex;align-items:baseline;white-space:pre;user-select:none;font-variant-numeric:tabular-nums;';
+
+      if (opts.prefix) {
+        const pre = document.createElement('span');
+        pre.className = 'countup-prefix';
+        pre.textContent = opts.prefix;
+        wrap.appendChild(pre);
+      }
+
+      for (let i = 0; i < len; i++) {
+        const fromDigit = parseInt(padA[i], 10);
+        const toDigit = parseInt(padB[i], 10);
+        const rank = len - 1 - i;
+        const baseTurns = Math.max(1, 2 - rank);
+        const diff = mod10(toDigit - fromDigit);
+        const totalSteps = diff + baseTurns * 10;
+
+        const slot = document.createElement('span');
+        slot.className = 'countup-slot';
+        slot.style.cssText = 'display:inline-block;height:' + CELL_EM + 'em;line-height:' + CELL_EM + 'em;overflow:hidden;vertical-align:baseline;position:relative;';
+
+        const strip = document.createElement('span');
+        strip.className = 'countup-strip';
+        strip.style.cssText = 'display:flex;flex-direction:column;transform:translateY(0em);will-change:transform;';
+
+        for (let s = 0; s <= totalSteps; s++) {
+          const digit = document.createElement('span');
+          digit.style.cssText = 'display:block;height:' + CELL_EM + 'em;line-height:' + CELL_EM + 'em;text-align:center;';
+          digit.textContent = String(mod10(fromDigit + s));
+          strip.appendChild(digit);
+        }
+
+        slot.appendChild(strip);
+        wrap.appendChild(slot);
+
+        rollColumns.push({
+          slot: slot,
+          strip: strip,
+          fromDigit: fromDigit,
+          toDigit: toDigit,
+          totalSteps: totalSteps,
+          index: i
+        });
+
+        if (opts.separator && (len - 1 - i) > 0 && (len - 1 - i) % 3 === 0) {
+          const sep = document.createElement('span');
+          sep.className = 'countup-separator';
+          sep.textContent = opts.separator;
+          wrap.appendChild(sep);
+        }
+      }
+
+      if (opts.suffix) {
+        const suf = document.createElement('span');
+        suf.className = 'countup-suffix';
+        suf.textContent = opts.suffix;
+        wrap.appendChild(suf);
+      }
+
+      el.appendChild(wrap);
     }
 
-    function renderValue(val) {
+    function renderCount(val) {
       el.textContent = formatValue(val, opts);
     }
 
@@ -195,8 +270,16 @@
       if (isRunning) return;
       hasStarted = true;
 
+      // Handle reduced motion preference
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        renderValue(endVal);
+        if (opts.mode === 'roll') {
+          setupRollDOM();
+          rollColumns.forEach(function (col) {
+            col.strip.style.transform = 'translateY(' + (-col.totalSteps * CELL_EM) + 'em)';
+          });
+        } else {
+          renderCount(endVal);
+        }
         return;
       }
 
@@ -205,68 +288,119 @@
       const totalMs = opts.duration * 1000;
       const delayMs = opts.delay * 1000;
 
-      function step(now) {
-        if (!startTimestamp) startTimestamp = now;
-        const elapsed = now - startTimestamp;
+      if (opts.mode === 'roll') {
+        setupRollDOM();
 
-        if (elapsed < delayMs) {
-          rafId = requestAnimationFrame(step);
-          return;
+        const STAGGER = 0.08;
+        const totalSpan = Math.max(0.001, totalMs);
+
+        function rollStep(now) {
+          if (!startTimestamp) startTimestamp = now;
+          const elapsed = now - startTimestamp;
+
+          if (elapsed < delayMs) {
+            rafId = requestAnimationFrame(rollStep);
+            return;
+          }
+
+          const activeElapsed = elapsed - delayMs;
+          const overallProgress = Math.min(1, activeElapsed / totalSpan);
+
+          rollColumns.forEach(function (col) {
+            const staggerDelay = col.index * STAGGER * totalSpan;
+            const colTime = Math.max(0, activeElapsed - staggerDelay);
+            const colDuration = Math.max(0.001, totalSpan - (rollColumns.length - 1) * STAGGER * totalSpan);
+            const u = Math.min(1, colTime / colDuration);
+            const eased = easeFn(u);
+            const currentStep = col.totalSteps * eased;
+            col.strip.style.transform = 'translateY(' + (-currentStep * CELL_EM).toFixed(4) + 'em)';
+          });
+
+          if (overallProgress < 1) {
+            rafId = requestAnimationFrame(rollStep);
+          } else {
+            rollColumns.forEach(function (col) {
+              col.strip.style.transform = 'translateY(' + (-col.totalSteps * CELL_EM).toFixed(4) + 'em)';
+            });
+            isRunning = false;
+            rafId = null;
+          }
         }
 
-        const activeElapsed = elapsed - delayMs;
-        const p = Math.min(1, activeElapsed / totalMs);
-        const eased = easeFn(p);
-        const currentVal = startVal + (endVal - startVal) * eased;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(rollStep);
 
-        renderValue(currentVal);
+      } else {
+        // Plain count mode
+        function countStep(now) {
+          if (!startTimestamp) startTimestamp = now;
+          const elapsed = now - startTimestamp;
 
-        if (p < 1) {
-          rafId = requestAnimationFrame(step);
-        } else {
-          renderValue(endVal);
-          isRunning = false;
-          rafId = null;
+          if (elapsed < delayMs) {
+            rafId = requestAnimationFrame(countStep);
+            return;
+          }
+
+          const activeElapsed = elapsed - delayMs;
+          const p = Math.min(1, activeElapsed / totalMs);
+          const eased = easeFn(p);
+          const currentVal = startVal + (endVal - startVal) * eased;
+
+          renderCount(currentVal);
+
+          if (p < 1) {
+            rafId = requestAnimationFrame(countStep);
+          } else {
+            renderCount(endVal);
+            isRunning = false;
+            rafId = null;
+          }
         }
+
+        if (rafId) cancelAnimationFrame(rafId);
+        renderCount(startVal);
+        rafId = requestAnimationFrame(countStep);
       }
-
-      if (rafId) cancelAnimationFrame(rafId);
-      renderValue(startVal);
-      rafId = requestAnimationFrame(step);
     }
 
     function replay() {
       if (isRunning) return;
+      el.classList.add('countup-pulse');
+      setTimeout(function () { el.classList.remove('countup-pulse'); }, 600);
       startAnimation();
     }
 
-    // Set initial rendered text
-    renderValue(startVal);
+    // Initial setup
+    if (opts.mode === 'roll') {
+      setupRollDOM();
+    } else {
+      renderCount(startVal);
+    }
 
-    // Replay on hover
+    // Replay on hover and click/tap
     if (opts.replayOnHover) {
       el.addEventListener('mouseenter', replay);
-      // Also attach to parent .stat or .stat-card if present for great UX
+      el.addEventListener('click', replay);
+
       const parentCard = el.closest('.stat') || el.closest('.stat-card') || el.closest('strong');
       if (parentCard && parentCard !== el) {
         parentCard.addEventListener('mouseenter', replay);
+        parentCard.addEventListener('click', replay);
       }
     }
 
-    // Trigger strategy
+    // View trigger with IntersectionObserver
     if (opts.trigger === 'load') {
       startAnimation();
     } else {
-      // trigger === 'view' using IntersectionObserver
       if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
-            if (entry.isIntersecting && !hasStarted) {
+            if (entry.isIntersecting) {
               startAnimation();
-              observer.unobserve(entry.target);
             }
           });
-        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0.25, rootMargin: '0px 0px -50px 0px' });
 
         const observeTarget = el.closest('.stat') || el;
         observer.observe(observeTarget);
@@ -297,7 +431,6 @@
     return instances;
   }
 
-  // Auto-init on DOMContentLoaded
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function () { initAll(); });
@@ -306,7 +439,6 @@
     }
   }
 
-  // Export to global BiteLens object and window
   const api = {
     create: createCountUp,
     init: initAll,
