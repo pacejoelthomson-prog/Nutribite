@@ -808,6 +808,19 @@ html.js .scroll-stack-card.in .showcase-visual {
 .stat { padding: 20px 0; }
 .stat small { display: block; color: var(--muted); font-weight: 600; }
 .stat strong { font-size: 3.4rem; letter-spacing: -.04em; line-height: 1.1; font-weight: 700; display: block; }
+.stat .count-up-text {
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.33, 1, 0.68, 1), color 0.25s ease;
+}
+.stat:hover .count-up-text {
+  color: var(--green);
+}
+.count-up-text {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  user-select: none;
+}
 .stat p { color: var(--muted); font-size: .92rem; max-width: 280px; }
 .stats-photo { position: relative; border-radius: var(--radius); overflow: hidden; background: #e9ebee; aspect-ratio: 4/3.2; }
 .stats-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
