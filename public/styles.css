@@ -990,11 +990,17 @@ footer .container { display: flex; justify-content: space-between; align-items: 
 .res-image { padding: 12px; }
 .res-image img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 20px; }
 .res-meta { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 6px 4px; }
-.res-cal { display: flex; gap: 26px; align-items: center; background: linear-gradient(135deg, var(--mint-2), #fff 70%); }
-.res-cal .ring-wrap { width: 180px; height: 180px; flex: none; }
-.res-cal .ring-center strong { font-size: 2.6rem; }
-.res-cal h2 { font-size: 1.5rem; letter-spacing: -.02em; }
-.res-cal p { color: var(--muted); margin: 6px 0 14px; }
+.res-cal { display: flex; gap: 28px; align-items: center; background: linear-gradient(135deg, var(--mint-2), #ffffff 70%); padding: 28px 32px; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: 0 4px 20px -4px rgba(16, 24, 40, 0.05); }
+.res-cal .ring-wrap { width: 200px; height: 200px; flex: none; margin: 0; }
+.res-cal .ring-center { padding: 8px; }
+.res-cal .ring-center strong { font-size: clamp(3.2rem, 5.5vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: 0.95; color: var(--ink); display: block; }
+.res-cal .ring-center strong .countup-roll-wrap,
+.res-cal .ring-center strong .count-up-text { font-weight: 800; letter-spacing: -.04em; }
+.res-cal .ring-center span { display: block; font-size: .92rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-top: 6px; }
+.res-cal h2 { font-size: clamp(1.6rem, 2.8vw, 2.1rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.15; margin: 0 0 8px; color: var(--ink); }
+.res-cal p { color: var(--muted); font-size: 1.02rem; line-height: 1.5; margin: 0 0 16px; }
+.res-cal p strong { color: var(--ink); font-weight: 700; }
+.res-cal .badge.dark { font-size: .85rem; padding: 8px 16px; }
 .macro-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 20px; }
 .macro { background: var(--soft); border-radius: 22px; padding: 16px; text-align: center; }
 .macro .val { font-size: 1.5rem; font-weight: 800; letter-spacing: -.03em; }
@@ -1280,7 +1286,12 @@ html.js .reveal-card.in .showcase-visual {
   .res-top .btn { width: 100%; justify-content: center; }
   .res-grid { grid-template-columns: 1fr; gap: 16px; }
   .res-image img { aspect-ratio: 4 / 3; }
-  .res-cal { flex-direction: column; text-align: center; padding: 22px 16px; gap: 16px; }
+  .res-cal { flex-direction: column; text-align: center; padding: 26px 18px; gap: 20px; }
+  .res-cal .ring-wrap { width: clamp(190px, 54vw, 220px); height: clamp(190px, 54vw, 220px); margin: 0 auto; }
+  .res-cal .ring-center strong { font-size: clamp(3.4rem, 11vw, 4.4rem); }
+  .res-cal .ring-center span { font-size: .95rem; letter-spacing: .09em; }
+  .res-cal h2 { font-size: 1.85rem; }
+  .res-cal p { font-size: .98rem; max-width: 360px; margin-left: auto; margin-right: auto; }
   .macro-cards { grid-template-columns: repeat(6, 1fr); gap: 8px; }
   .macro-cards .macro:nth-child(1),
   .macro-cards .macro:nth-child(2),
@@ -1376,7 +1387,12 @@ html.mode-9-16 .res-top { flex-direction: column; align-items: flex-start; gap: 
 html.mode-9-16 .res-top .btn { width: 100%; justify-content: center; }
 html.mode-9-16 .res-grid { grid-template-columns: 1fr; gap: 16px; }
 html.mode-9-16 .res-image img { aspect-ratio: 4 / 3; }
-html.mode-9-16 .res-cal { flex-direction: column; text-align: center; padding: 22px 16px; gap: 16px; }
+html.mode-9-16 .res-cal { flex-direction: column; text-align: center; padding: 26px 18px; gap: 20px; }
+html.mode-9-16 .res-cal .ring-wrap { width: clamp(190px, 54vw, 220px); height: clamp(190px, 54vw, 220px); margin: 0 auto; }
+html.mode-9-16 .res-cal .ring-center strong { font-size: clamp(3.4rem, 11vw, 4.4rem); }
+html.mode-9-16 .res-cal .ring-center span { font-size: .95rem; letter-spacing: .09em; }
+html.mode-9-16 .res-cal h2 { font-size: 1.85rem; }
+html.mode-9-16 .res-cal p { font-size: .98rem; max-width: 360px; margin-left: auto; margin-right: auto; }
 html.mode-9-16 .macro-cards { grid-template-columns: repeat(6, 1fr); gap: 8px; }
 html.mode-9-16 .macro-cards .macro:nth-child(1),
 html.mode-9-16 .macro-cards .macro:nth-child(2),

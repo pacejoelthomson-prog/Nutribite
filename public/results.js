@@ -58,7 +58,7 @@
       </div>
       <div>
         <div class="panel res-cal">
-          <div class="ring-wrap">${NB.ring({ size: 180, stroke: 16, id: "calRing", over: cal > goal })}
+          <div class="ring-wrap">${NB.ring({ size: 200, stroke: 16, id: "calRing", over: cal > goal })}
             <div class="ring-center"><div><strong id="calNum">0</strong><span>calories</span></div></div></div>
           <div>
             <h2>Total Calories</h2>
