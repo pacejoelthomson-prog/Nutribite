@@ -58,8 +58,14 @@
       </div>
       <div>
         <div class="panel res-cal">
-          <div class="ring-wrap">${NB.ring({ size: 200, stroke: 16, id: "calRing", over: cal > goal })}
-            <div class="ring-center"><div><strong id="calNum">0</strong><span>calories</span></div></div></div>
+          <div class="ring-wrap">${NB.ring({ size: 210, stroke: 16, id: "calRing", over: cal > goal })}
+            <div class="ring-center">
+              <div class="ring-metric">
+                <div id="calNum" class="cal-number">${Math.round(cal).toLocaleString()}</div>
+                <div class="cal-unit">calories</div>
+              </div>
+            </div>
+          </div>
           <div>
             <h2>Total Calories</h2>
             <p>This is <strong>${Math.round((cal / goal) * 100)}%</strong> of your ${goal} kcal daily goal. Day ${r.day} total so far: <strong>${dayTotal} kcal</strong>.</p>
@@ -68,7 +74,7 @@
         </div>
         <div class="macro-cards">
           ${macros.map((x) => `<div class="macro">
-            <div class="val" style="color:${x.color}"><span data-count="${n(m[x.key])}">0</span>g</div>
+            <div class="val" style="color:${x.color}">${n(m[x.key])}g</div>
             <div class="lbl">${x.label}</div>
             <div class="bar"><i style="background:${x.color}" data-w="${Math.min(100, (n(m[x.key]) / x.dv) * 100)}"></i></div></div>`).join("")}
         </div>
@@ -105,7 +111,5 @@
     ${actions}`;
 
   NB.setRing(document.getElementById("calRing"), cal / goal);
-  NB.countUp(document.getElementById("calNum"), cal, 1300);
-  document.querySelectorAll("[data-count]").forEach((el) => NB.countUp(el, +el.dataset.count));
   setTimeout(() => document.querySelectorAll(".bar i").forEach((el) => (el.style.width = el.dataset.w + "%")), 150);
 })();

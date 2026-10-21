@@ -93,18 +93,9 @@ const NB = (() => {
     const c = +el.dataset.c, p = Math.max(0, Math.min(1, pct));
     requestAnimationFrame(() => setTimeout(() => { el.style.strokeDashoffset = c * (1 - p); }, 60));
   }
-  function countUp(el, to, dur = 1100, opts = {}) {
+  function countUp(el, to) {
     if (!el) return;
-    if (window.CountUp && window.CountUp.create) {
-      return window.CountUp.create(el, Object.assign({ to: to, duration: dur / 1000, trigger: 'load', separator: ',' }, opts));
-    }
-    const t0 = performance.now();
-    const step = (now) => {
-      const p = Math.min(1, (now - t0) / dur);
-      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toLocaleString();
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
+    el.textContent = Math.round(+to || 0).toLocaleString();
   }
 
   let toastTimer;
