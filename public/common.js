@@ -329,36 +329,62 @@ const NB = (() => {
     window.addEventListener("resize", fitKword);
     window.addEventListener("orientationchange", fitKword);
 
+    // Staggered entrance
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         el.classList.add("is-in");
-        setTimeout(() => el.classList.add("is-live"), 1400);
+        setTimeout(() => el.classList.add("is-live"), 1050);
         obs.disconnect();
       }
-    }, { threshold: 0.15 });
+    }, { threshold: 0.12 });
     obs.observe(el);
 
-    let lastY = window.scrollY, vel = 0, isObserving = false;
-    const tick = () => {
-      if (!isObserving) return;
+    // Butter-smooth hardware-accelerated scroll skew
+    let rafId = null;
+    let lastY = window.scrollY;
+    let vel = 0;
+    let currentSkew = 0;
+    let isVisible = false;
+
+    const updateSkew = () => {
       const curY = window.scrollY;
-      vel += (curY - lastY - vel) * 0.14;
+      const delta = curY - lastY;
       lastY = curY;
-      const skew = Math.max(-8, Math.min(8, -vel * 0.32));
-      if (inner) inner.style.transform = `skewX(${skew.toFixed(2)}deg)`;
-      requestAnimationFrame(tick);
+
+      vel += (delta - vel) * 0.22;
+      const targetSkew = Math.max(-6.5, Math.min(6.5, -vel * 0.28));
+      currentSkew += (targetSkew - currentSkew) * 0.26;
+
+      if (inner) {
+        inner.style.transform = `translate3d(0,0,0) skewX(${currentSkew.toFixed(2)}deg)`;
+      }
+
+      if (Math.abs(vel) > 0.04 || Math.abs(currentSkew) > 0.04) {
+        rafId = requestAnimationFrame(updateSkew);
+      } else {
+        if (inner) inner.style.transform = "translate3d(0,0,0)";
+        rafId = null;
+      }
+    };
+
+    const onScroll = () => {
+      if (!isVisible) return;
+      if (!rafId) {
+        lastY = window.scrollY;
+        rafId = requestAnimationFrame(updateSkew);
+      }
     };
 
     const skewObs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !isObserving) {
-        isObserving = true;
+      isVisible = entry.isIntersecting;
+      if (isVisible && !rafId) {
         lastY = window.scrollY;
-        requestAnimationFrame(tick);
-      } else if (!entry.isIntersecting) {
-        isObserving = false;
+        rafId = requestAnimationFrame(updateSkew);
       }
-    });
+    }, { threshold: 0.05 });
     skewObs.observe(el);
+
+    window.addEventListener("scroll", onScroll, { passive: true });
   }
 
   document.documentElement.classList.add('js');
