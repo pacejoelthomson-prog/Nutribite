@@ -126,6 +126,7 @@ const NB = (() => {
     document.querySelectorAll(".ratio-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.ratio === ratio);
     });
+    window.lenis?.resize();
   }
 
   function initRatioSwitcher() {
@@ -343,8 +344,43 @@ const NB = (() => {
     s.observe(footer);
   }
 
+  let lenisInstance = null;
+  function initLenis() {
+    if (typeof Lenis === "undefined") return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    try {
+      lenisInstance = new Lenis({
+        lerp: 0.09,
+        duration: 1.2,
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.15,
+        infinite: false,
+        autoRaf: true
+      });
+
+      window.lenis = lenisInstance;
+
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", (e) => {
+          const href = anchor.getAttribute("href");
+          if (!href || href === "#") return;
+          const target = href === "#top" ? 0 : document.querySelector(href);
+          if (target !== null && target !== undefined) {
+            e.preventDefault();
+            lenisInstance.scrollTo(target, { offset: 0, duration: 1.2 });
+          }
+        });
+      });
+    } catch (err) {
+      console.warn("Lenis init skipped:", err);
+    }
+  }
+
   document.documentElement.classList.add('js');
   document.addEventListener("DOMContentLoaded", () => {
+    initLenis();
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
     document.querySelectorAll(".reveal, .reveal-card").forEach((el) => io.observe(el));
     initKword();
@@ -352,12 +388,16 @@ const NB = (() => {
     document.querySelectorAll(".back-to-top").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (window.lenis) {
+          window.lenis.scrollTo(0, { duration: 1.2 });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       });
     });
   });
 
-  return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome, applyRatioMode, getTheme, setTheme: applyTheme, toggleTheme, initKword };
+  return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome, applyRatioMode, getTheme, setTheme: applyTheme, toggleTheme, initKword, initLenis, lenis: () => lenisInstance };
 })();
 
 if (typeof window !== "undefined") {

@@ -21,7 +21,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <link rel="stylesheet" href="styles.css?v=4.2" />
+  <link rel="stylesheet" href="styles.css?v=4.3" />
   <script>
     document.documentElement.classList.add('js');
     try {
@@ -412,7 +412,8 @@
   </footer>
 
   <script src="bg3d.js"></script>
-  <script src="common.js?v=4.2"></script>
+  <script src="lenis.min.js"></script>
+  <script src="common.js?v=4.3"></script>
   <script>
     NB.mountChrome("home");
 
@@ -460,6 +461,7 @@
       const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(move); } };
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onScroll);
+      window.lenis?.on("scroll", onScroll);
       move();
     }
 
@@ -616,6 +618,7 @@
       };
 
       window.addEventListener("scroll", schedule, { passive: true });
+      window.lenis?.on("scroll", schedule);
       window.addEventListener("resize", () => {
         settings = getSettings();
         schedule();
