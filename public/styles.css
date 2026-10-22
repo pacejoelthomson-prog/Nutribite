@@ -1154,24 +1154,28 @@ html.js .scroll-stack-card.in .showcase-visual {
 }
 
 .kword {
-  letter-spacing: -0.065em;
-  font-size: clamp(74px, 18vw, 290px);
-  line-height: 0.92;
+  letter-spacing: -0.05em;
+  font-size: clamp(34px, 12.5vw, 220px);
+  line-height: 0.95;
   display: flex;
   justify-content: center;
+  align-items: center;
   overflow: hidden;
   font-weight: 800;
   user-select: none;
-  margin: clamp(24px, 4vw, 44px) 0;
+  margin: clamp(16px, 3.5vw, 40px) 0;
   color: var(--ink);
   width: 100%;
+  max-width: 100%;
   text-align: center;
 }
 .kword__inner {
   will-change: transform;
   transform-origin: 50% 100%;
-  padding: 0 0.06em 0.06em;
+  padding: 0 0.04em 0.04em;
   display: inline-flex;
+  white-space: nowrap;
+  max-width: 100%;
 }
 .kword .ch {
   transition: transform 1.1s cubic-bezier(0.34, 1.5, 0.64, 1);
@@ -1625,6 +1629,70 @@ html.js .reveal-card.in .showcase-visual {
   .day-body { gap: 12px; }
   .day-body .ring-wrap { width: 102px; height: 102px; }
   .day-body .ring-center strong { font-size: 1.25rem; }
+
+  /* Footer in 9:16 / Mobile */
+  .site-footer {
+    padding: 36px 0 24px;
+  }
+  .footer-top {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    padding-bottom: 16px;
+  }
+  .footer-links {
+    justify-content: center;
+    gap: 14px 20px;
+    width: 100%;
+  }
+  .footer-links a {
+    font-size: 0.92rem;
+  }
+  .kword {
+    font-size: clamp(28px, 11.2vw, 52px);
+    letter-spacing: -0.04em;
+    margin: 16px 0;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding-top: 16px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  .footer-bottom span {
+    max-width: 320px;
+    display: inline-block;
+  }
+  .back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(12, 13, 16, 0.05);
+    border: 1px solid var(--line);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  html.dark .back-to-top {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+  }
+}
+
+@media (max-width: 380px) {
+  .kword {
+    font-size: clamp(24px, 10.2vw, 38px);
+    letter-spacing: -0.035em;
+  }
+  .footer-links {
+    gap: 10px 14px;
+  }
 }
 
 /* Explicit 9:16 forced mode styling (matches media query rules) */
@@ -1725,6 +1793,55 @@ html.mode-9-16 .day-card { padding: 18px 16px; }
 html.mode-9-16 .day-body { gap: 12px; }
 html.mode-9-16 .day-body .ring-wrap { width: 102px; height: 102px; }
 html.mode-9-16 .day-body .ring-center strong { font-size: 1.25rem; }
+html.mode-9-16 .site-footer {
+  padding: 36px 0 24px;
+}
+html.mode-9-16 .footer-top {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-bottom: 16px;
+}
+html.mode-9-16 .footer-links {
+  justify-content: center;
+  gap: 14px 20px;
+  width: 100%;
+}
+html.mode-9-16 .kword {
+  font-size: clamp(28px, 11.2vw, 52px);
+  letter-spacing: -0.04em;
+  margin: 16px 0;
+}
+html.mode-9-16 .footer-bottom {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding-top: 16px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+html.mode-9-16 .footer-bottom span {
+  max-width: 320px;
+  display: inline-block;
+}
+html.mode-9-16 .back-to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(12, 13, 16, 0.05);
+  border: 1px solid var(--line);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+html.mode-9-16.dark .back-to-top {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
 
 /* ==========================================================================
    RATIO SWITCHER FLOATING CONTROLLER

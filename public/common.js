@@ -126,6 +126,7 @@ const NB = (() => {
     document.querySelectorAll(".ratio-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.ratio === ratio);
     });
+    if (typeof fitKword === "function") fitKword();
   }
 
   function initRatioSwitcher() {
@@ -302,11 +303,31 @@ const NB = (() => {
     initRatioSwitcher();
   }
 
+  function fitKword() {
+    const el = document.querySelector(".kword");
+    const inner = el ? el.querySelector(".kword__inner") : null;
+    if (!el || !inner) return;
+
+    el.style.fontSize = "";
+    const containerWidth = el.clientWidth;
+    const contentWidth = inner.scrollWidth;
+
+    if (containerWidth > 0 && contentWidth > containerWidth - 16) {
+      const currentSize = parseFloat(window.getComputedStyle(el).fontSize);
+      const targetSize = Math.floor(currentSize * ((containerWidth - 20) / contentWidth));
+      el.style.fontSize = `${targetSize}px`;
+    }
+  }
+
   function initKword() {
     const el = document.querySelector(".kword");
     if (!el || el._kwordInit) return;
     el._kwordInit = true;
     const inner = el.querySelector(".kword__inner");
+
+    fitKword();
+    window.addEventListener("resize", fitKword);
+    window.addEventListener("orientationchange", fitKword);
 
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
@@ -345,6 +366,13 @@ const NB = (() => {
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
     document.querySelectorAll(".reveal, .reveal-card").forEach((el) => io.observe(el));
     initKword();
+
+    document.querySelectorAll(".back-to-top").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
   });
 
   return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome, applyRatioMode, getTheme, setTheme: applyTheme, toggleTheme, initKword };
