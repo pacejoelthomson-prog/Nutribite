@@ -18,7 +18,14 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
   <link rel="shortcut icon" href="favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-  <link rel="stylesheet" href="styles.css?v=3.7" />
+  <link rel="stylesheet" href="styles.css?v=3.8" />
+  <script>
+    try {
+      var t = localStorage.getItem('bitelens_theme');
+      if (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) t = 'dark';
+      if (t === 'dark') document.documentElement.classList.add('dark');
+    } catch (e) {}
+  </script>
 </head>
 <body class="page-bg">
   <div id="chrome"></div>
@@ -45,9 +52,8 @@
     <div class="days" id="days"></div>
   </main>
 
-  <script src="countup.js?v=3.5"></script>
-  <script src="common.js?v=3.5"></script>
+  <script src="common.js?v=3.8"></script>
   <script>NB.mountChrome("progress");</script>
-  <script src="progress.js"></script>
+  <script src="progress.js?v=3.8"></script>
 </body>
 </html>

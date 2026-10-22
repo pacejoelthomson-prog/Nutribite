@@ -172,6 +172,45 @@ const NB = (() => {
     });
   }
 
+  const THEME_KEY = "bitelens_theme";
+  function getTheme() {
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === "dark" || saved === "light") return saved;
+      return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+    } catch (e) {
+      return "light";
+    }
+  }
+
+  function applyTheme(theme) {
+    const isDark = theme === "dark";
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+
+    document.querySelectorAll(".theme-btn").forEach((btn) => {
+      btn.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+      btn.setAttribute("title", isDark ? "Switch to light mode" : "Switch to dark mode");
+    });
+    document.querySelectorAll(".theme-inline-text").forEach((el) => {
+      el.textContent = isDark ? "Light mode" : "Dark mode";
+    });
+  }
+
+  function toggleTheme() {
+    const cur = document.documentElement.classList.contains("dark") ? "dark" : "light";
+    applyTheme(cur === "dark" ? "light" : "dark");
+  }
+
+  // Initialize theme early
+  try {
+    applyTheme(getTheme());
+  } catch (e) {}
+
   /** Shared glass menu bar + powered-by banner, injected on every page */
   function mountChrome(active) {
     const host = document.getElementById("chrome");
@@ -186,6 +225,8 @@ const NB = (() => {
     const iconCamera = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>`;
     const iconChart = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`;
 
+    const isDark = document.documentElement.classList.contains("dark");
+
     host.innerHTML = `
       <div class="powered-bar"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:5px;display:inline-block"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><b>Powered by AI</b> to detect the calories &amp; nutrients of the food in your hands</div>
       <div class="nav-wrap"><nav class="nav" id="nav">
@@ -195,10 +236,26 @@ const NB = (() => {
           ${link("index.html", "home", iconHome, "Home")}
           ${link("scan.html", "scan", iconCamera, "Scan Food")}
           ${link("progress.html", "progress", iconChart, "My Progress")}
+          <button class="nav-theme-toggle" id="navThemeToggle" type="button" aria-label="Toggle theme">
+            <span class="nav-icon" aria-hidden="true">
+              <svg class="nav-sun-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+              <svg class="nav-moon-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </span>
+            <span class="theme-inline-text">${isDark ? "Light mode" : "Dark mode"}</span>
+          </button>
         </div>
-        <a href="scan.html" class="btn btn-dark btn-sm nav-cta">${iconCamera} Scan Food</a>
-        <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+        <div class="nav-actions">
+          <button class="theme-btn" id="themeBtn" aria-label="${isDark ? "Switch to light mode" : "Switch to dark mode"}" title="${isDark ? "Switch to light mode" : "Switch to dark mode"}">
+            <span class="theme-icon theme-sun" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+            <span class="theme-icon theme-moon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+          </button>
+          <a href="scan.html" class="btn btn-dark btn-sm nav-cta">${iconCamera} Scan Food</a>
+          <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+        </div>
       </nav></div>`;
+
+    document.getElementById("themeBtn")?.addEventListener("click", toggleTheme);
+    document.getElementById("navThemeToggle")?.addEventListener("click", toggleTheme);
 
     const links = document.getElementById("navLinks");
     const glider = document.getElementById("navGlider");
@@ -245,13 +302,52 @@ const NB = (() => {
     initRatioSwitcher();
   }
 
+  function initKword() {
+    const el = document.querySelector(".kword");
+    if (!el || el._kwordInit) return;
+    el._kwordInit = true;
+    const inner = el.querySelector(".kword__inner");
+
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        el.classList.add("is-in");
+        setTimeout(() => el.classList.add("is-live"), 1400);
+        obs.disconnect();
+      }
+    }, { threshold: 0.15 });
+    obs.observe(el);
+
+    let lastY = window.scrollY, vel = 0, isObserving = false;
+    const tick = () => {
+      if (!isObserving) return;
+      const curY = window.scrollY;
+      vel += (curY - lastY - vel) * 0.14;
+      lastY = curY;
+      const skew = Math.max(-8, Math.min(8, -vel * 0.32));
+      if (inner) inner.style.transform = `skewX(${skew.toFixed(2)}deg)`;
+      requestAnimationFrame(tick);
+    };
+
+    const skewObs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !isObserving) {
+        isObserving = true;
+        lastY = window.scrollY;
+        requestAnimationFrame(tick);
+      } else if (!entry.isIntersecting) {
+        isObserving = false;
+      }
+    });
+    skewObs.observe(el);
+  }
+
   document.documentElement.classList.add('js');
   document.addEventListener("DOMContentLoaded", () => {
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
     document.querySelectorAll(".reveal, .reveal-card").forEach((el) => io.observe(el));
+    initKword();
   });
 
-  return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome, applyRatioMode };
+  return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome, applyRatioMode, getTheme, setTheme: applyTheme, toggleTheme, initKword };
 })();
 
 if (typeof window !== "undefined") {
