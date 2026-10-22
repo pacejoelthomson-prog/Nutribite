@@ -126,7 +126,6 @@ const NB = (() => {
     document.querySelectorAll(".ratio-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.ratio === ratio);
     });
-    if (typeof fitKword === "function") fitKword();
   }
 
   function initRatioSwitcher() {
@@ -303,88 +302,45 @@ const NB = (() => {
     initRatioSwitcher();
   }
 
-  function fitKword() {
-    const el = document.querySelector(".kword");
-    const inner = el ? el.querySelector(".kword__inner") : null;
-    if (!el || !inner) return;
-
-    el.style.fontSize = "";
-    const containerWidth = el.clientWidth;
-    const contentWidth = inner.scrollWidth;
-
-    if (containerWidth > 0 && contentWidth > containerWidth - 16) {
-      const currentSize = parseFloat(window.getComputedStyle(el).fontSize);
-      const targetSize = Math.floor(currentSize * ((containerWidth - 20) / contentWidth));
-      el.style.fontSize = `${targetSize}px`;
-    }
-  }
-
   function initKword() {
     const el = document.querySelector(".kword");
     if (!el || el._kwordInit) return;
     el._kwordInit = true;
     const inner = el.querySelector(".kword__inner");
+    const footer = el.closest(".site-footer") || el;
 
-    fitKword();
-    window.addEventListener("resize", fitKword);
-    window.addEventListener("orientationchange", fitKword);
-
-    // Staggered entrance
+    // Staggered letter reveal & live breathe activation matching silent-hostels
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         el.classList.add("is-in");
-        setTimeout(() => el.classList.add("is-live"), 1050);
+        setTimeout(() => el.classList.add("is-live"), 1500);
         obs.disconnect();
       }
-    }, { threshold: 0.12 });
+    }, { threshold: 0.15 });
     obs.observe(el);
 
-    // Butter-smooth hardware-accelerated scroll skew
-    let rafId = null;
-    let lastY = window.scrollY;
-    let vel = 0;
-    let currentSkew = 0;
-    let isVisible = false;
-
-    const updateSkew = () => {
-      const curY = window.scrollY;
-      const delta = curY - lastY;
-      lastY = curY;
-
-      vel += (delta - vel) * 0.22;
-      const targetSkew = Math.max(-6.5, Math.min(6.5, -vel * 0.28));
-      currentSkew += (targetSkew - currentSkew) * 0.26;
-
-      if (inner) {
-        inner.style.transform = `translate3d(0,0,0) skewX(${currentSkew.toFixed(2)}deg)`;
-      }
-
-      if (Math.abs(vel) > 0.04 || Math.abs(currentSkew) > 0.04) {
-        rafId = requestAnimationFrame(updateSkew);
-      } else {
-        if (inner) inner.style.transform = "translate3d(0,0,0)";
-        rafId = null;
-      }
+    // Scroll skew physics matching silent-hostels
+    let e = window.scrollY, i = 0, a = false;
+    const o = () => {
+      if (!a) return;
+      const t = window.scrollY;
+      i += (t - e - i) * 0.12;
+      e = t;
+      const s = Math.max(-8, Math.min(8, -i * 0.35));
+      if (inner) inner.style.transform = `skewX(${s}deg)`;
+      requestAnimationFrame(o);
     };
 
-    const onScroll = () => {
-      if (!isVisible) return;
-      if (!rafId) {
-        lastY = window.scrollY;
-        rafId = requestAnimationFrame(updateSkew);
+    const s = new IntersectionObserver(([t]) => {
+      if (t.isIntersecting && !a) {
+        a = true;
+        e = window.scrollY;
+        requestAnimationFrame(o);
+      } else if (!t.isIntersecting) {
+        a = false;
       }
-    };
-
-    const skewObs = new IntersectionObserver(([entry]) => {
-      isVisible = entry.isIntersecting;
-      if (isVisible && !rafId) {
-        lastY = window.scrollY;
-        rafId = requestAnimationFrame(updateSkew);
-      }
-    }, { threshold: 0.05 });
-    skewObs.observe(el);
-
-    window.addEventListener("scroll", onScroll, { passive: true });
+    });
+    s.observe(footer);
   }
 
   document.documentElement.classList.add('js');
