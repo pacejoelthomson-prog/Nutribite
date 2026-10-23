@@ -4,6 +4,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
 
 // --- Load .env (no dotenv dependency) ---
 const envPath = path.join(__dirname, ".env");
@@ -37,10 +38,17 @@ const MIME = {
   ".svg": "image/svg+xml",
   ".png": "image/png",
   ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".avif": "image/avif",
   ".ico": "image/x-icon",
   ".txt": "text/plain; charset=utf-8",
   ".xml": "application/xml; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".woff2": "font/woff2",
+  ".woff": "font/woff",
+  ".ttf": "font/ttf",
+  ".webmanifest": "application/manifest+json",
 };
 
 const PROMPT = `You are an elite clinical dietitian and computer vision food analyst.
@@ -234,17 +242,93 @@ const server = http.createServer(async (req, res) => {
     if (req.method !== "GET" && req.method !== "HEAD") return send(res, 405, { error: "Method not allowed" });
 
     // Static files
-    let urlPath = decodeURIComponent(req.url.split("?")[0]);
+    const [rawPath, queryString] = req.url.split("?");
+    let urlPath = decodeURIComponent(rawPath);
     if (urlPath === "/") urlPath = "/index.html";
-    const filePath = path.normalize(path.join(PUBLIC_DIR, urlPath));
+    let filePath = path.normalize(path.join(PUBLIC_DIR, urlPath));
     if (filePath !== PUBLIC_DIR && !filePath.startsWith(PUBLIC_DIR + path.sep)) return send(res, 403, "Forbidden", "text/plain");
-    fs.readFile(filePath, (err, buf) => {
-      if (err) return send(res, 404, "Not found", "text/plain");
-      if (req.method === "HEAD") {
-        res.writeHead(200, { "Content-Type": MIME[path.extname(filePath)] || "application/octet-stream" });
+
+    // Prefer minified .min.css or .min.js if available
+    const initialExt = path.extname(filePath).toLowerCase();
+    if (initialExt === ".css" && !filePath.endsWith(".min.css")) {
+      const minCandidate = filePath.replace(/\.css$/, ".min.css");
+      if (fs.existsSync(minCandidate)) filePath = minCandidate;
+    } else if (initialExt === ".js" && !filePath.endsWith(".min.js")) {
+      const minCandidate = filePath.replace(/\.js$/, ".min.js");
+      if (fs.existsSync(minCandidate)) filePath = minCandidate;
+    }
+
+    fs.stat(filePath, (statErr, stat) => {
+      if (statErr || !stat.isFile()) return send(res, 404, "Not found", "text/plain");
+
+      const ext = path.extname(filePath).toLowerCase();
+      const contentType = MIME[ext] || "application/octet-stream";
+      const etag = `W/"${stat.size.toString(16)}-${Math.floor(stat.mtimeMs).toString(16)}"`;
+      const lastModified = stat.mtime.toUTCString();
+
+      // Production caching header policy
+      let cacheControl;
+      if (ext === ".html") {
+        cacheControl = "public, max-age=0, must-revalidate";
+      } else if (queryString && /(?:^|[?&])v=/.test(queryString)) {
+        cacheControl = "public, max-age=31536000, immutable";
+      } else if (/\.(webp|avif|png|jpe?g|ico|woff2?|ttf)$/.test(ext)) {
+        cacheControl = "public, max-age=31536000, immutable";
+      } else {
+        cacheControl = "public, max-age=86400, stale-while-revalidate=604800";
+      }
+
+      const headers = {
+        "Content-Type": contentType,
+        "Cache-Control": cacheControl,
+        "ETag": etag,
+        "Last-Modified": lastModified,
+        "Vary": "Accept-Encoding",
+      };
+
+      // 304 conditional revalidation check
+      const ifNoneMatch = req.headers["if-none-match"];
+      const ifModifiedSince = req.headers["if-modified-since"];
+      if (ifNoneMatch === etag || (ifModifiedSince && new Date(ifModifiedSince) >= stat.mtime)) {
+        res.writeHead(304, headers);
         return res.end();
       }
-      send(res, 200, buf, MIME[path.extname(filePath)] || "application/octet-stream");
+
+      if (req.method === "HEAD") {
+        res.writeHead(200, headers);
+        return res.end();
+      }
+
+      fs.readFile(filePath, (readErr, buf) => {
+        if (readErr) return send(res, 500, "Error reading file", "text/plain");
+
+        const acceptEncoding = req.headers["accept-encoding"] || "";
+        const isCompressible = /^(text\/|application\/(javascript|json|xml)|image\/svg\+xml)/.test(contentType);
+
+        if (isCompressible && buf.length > 256) {
+          if (/\bbr\b/.test(acceptEncoding) && typeof zlib.brotliCompressSync === "function") {
+            try {
+              const compressed = zlib.brotliCompressSync(buf);
+              headers["Content-Encoding"] = "br";
+              headers["Content-Length"] = compressed.length;
+              res.writeHead(200, headers);
+              return res.end(compressed);
+            } catch (e) {}
+          } else if (/\bgzip\b/.test(acceptEncoding)) {
+            try {
+              const compressed = zlib.gzipSync(buf);
+              headers["Content-Encoding"] = "gzip";
+              headers["Content-Length"] = compressed.length;
+              res.writeHead(200, headers);
+              return res.end(compressed);
+            } catch (e) {}
+          }
+        }
+
+        headers["Content-Length"] = buf.length;
+        res.writeHead(200, headers);
+        res.end(buf);
+      });
     });
   } catch (e) {
     console.error(e);

@@ -3,25 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJD7M4GXQS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJD7M4GXQS');
+  </script>
   <title>BiteLens — AI Food Scanner | Scan Food, Know Your Calories</title>
   <meta name="description" content="BiteLens is an AI food scanner that instantly detects calories, macros, nutrients, and advantages/disadvantages from a photo. Track your daily intake with ease." />
-  <link rel="canonical" href="https://nutribite-cvg1.onrender.com/" />
+  <link rel="canonical" href="https://nutribite-cvg1.onrender.com/index.html" />
   <!-- TODO: update after domain migration -->
   <meta property="og:title" content="BiteLens — AI Food Scanner | Scan Food, Know Your Calories" />
   <meta property="og:description" content="Point your camera at any meal to get calories, macros, and nutrients in seconds with BiteLens AI." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://nutribite-cvg1.onrender.com/" />
+  <meta property="og:url" content="https://nutribite-cvg1.onrender.com/index.html" />
   <!-- TODO: update after domain migration -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="BiteLens — AI Food Scanner" />
   <meta name="twitter:description" content="Point your camera at any meal to get calories, macros, and nutrients in seconds." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&family=Urbanist:wght@400;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&family=Urbanist:wght@400;600;700;800&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&family=Urbanist:wght@400;600;700;800&display=swap" />
+  </noscript>
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <link rel="stylesheet" href="styles.css?v=4.3" />
+  <link rel="stylesheet" href="styles.css?v=4.4" />
   <script>
     document.documentElement.classList.add('js');
     try {
@@ -36,7 +48,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "BiteLens",
-    "url": "https://nutribite-cvg1.onrender.com/",
+    "url": "https://nutribite-cvg1.onrender.com/index.html",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "All",
     "description": "AI food scanner that instantly calculates calories, macros, micronutrients, advantages, and disadvantages from a food photo.",
@@ -49,7 +61,9 @@
   </script>
 </head>
 <body id="top">
+  <a href="#main" class="skip-link">Skip to main content</a>
   <div id="chrome"></div>
+  <main id="main">
 
   <div class="hero-bg">
     <canvas id="bg3d" class="hero-bg-canvas" aria-hidden="true"></canvas>
@@ -84,7 +98,7 @@
       <div class="phone-stage reveal">
         <div class="phone-wrap">
           <div class="phone"><div class="screen">
-            <h6>Calories today</h6>
+            <p class="screen-title">Calories today</p>
             <div class="big"><span class="count-up-text" data-from="0" data-to="1842" data-separator="," data-duration="1.6" data-easing="easeOut" data-replay-on-hover="true">1,842</span> <small>kcal · Day 4</small></div>
             <svg class="chart" viewBox="0 0 260 100" preserveAspectRatio="none">
               <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22c55e" stop-opacity=".28"/><stop offset="1" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs>
@@ -178,7 +192,11 @@
                 <div class="showcase-visual">
                   <span class="showcase-glow glow-green" aria-hidden="true"></span>
                   <div class="showcase-frame" data-parallax="26">
-                    <img src="showcase-scan.jpg" alt="Hand holding phone scanning grilled chicken with quinoa and vegetables, displaying food detected nutritional panel" loading="lazy" />
+                    <picture>
+                      <source type="image/avif" srcset="showcase-scan.avif" />
+                      <source type="image/webp" srcset="showcase-scan.webp" />
+                      <img src="showcase-scan.jpg" width="1024" height="576" alt="Hand holding phone scanning grilled chicken with quinoa and vegetables, displaying food detected nutritional panel" loading="lazy" decoding="async" />
+                    </picture>
                   </div>
                 </div>
               </div>
@@ -207,7 +225,11 @@
                 <div class="showcase-visual">
                   <span class="showcase-glow glow-dual" aria-hidden="true"></span>
                   <div class="showcase-frame" data-parallax="-26">
-                    <img src="showcase-proscons.jpg" alt="Smartphone displaying chicken salad scan with green advantages and red disadvantages panels" loading="lazy" />
+                    <picture>
+                      <source type="image/avif" srcset="showcase-proscons.avif" />
+                      <source type="image/webp" srcset="showcase-proscons.webp" />
+                      <img src="showcase-proscons.jpg" width="1024" height="576" alt="Smartphone displaying chicken salad scan with green advantages and red disadvantages panels" loading="lazy" decoding="async" />
+                    </picture>
                   </div>
                 </div>
               </div>
@@ -236,7 +258,11 @@
                 <div class="showcase-visual">
                   <span class="showcase-glow glow-blue" aria-hidden="true"></span>
                   <div class="showcase-frame" data-parallax="28">
-                    <img src="showcase-progress.png" alt="Smartphone on table showing Day 1 and Day 2 calorie rings with daily progress weekly overview" loading="lazy" />
+                    <picture>
+                      <source type="image/avif" srcset="showcase-progress.avif" />
+                      <source type="image/webp" srcset="showcase-progress.webp" />
+                      <img src="showcase-progress.png" width="1024" height="558" alt="Smartphone on table showing Day 1 and Day 2 calorie rings with daily progress weekly overview" loading="lazy" decoding="async" />
+                    </picture>
                   </div>
                 </div>
               </div>
@@ -266,7 +292,11 @@
         <div class="stat reveal"><small>Days you can track</small><strong>Unlimited</strong><p>Not a challenge, just a daily habit. Keep going for as long as you like.</p></div>
       </div>
       <div class="stats-photo reveal">
-        <img src="hero.jpg" alt="Person holding a healthy salad bowl" />
+        <picture>
+          <source type="image/avif" srcset="hero.avif" />
+          <source type="image/webp" srcset="hero.webp" />
+          <img src="hero.jpg" width="1200" height="896" alt="Person holding a healthy salad bowl" loading="lazy" decoding="async" />
+        </picture>
         <div class="donut-card"><div class="donut"></div>
           <div class="donut-legend"><span style="--c:var(--protein)">Protein 30%</span><span style="--c:var(--carbs)">Carbs 42%</span><span style="--c:var(--fat)">Fat 28%</span></div>
         </div>
@@ -376,11 +406,12 @@
       <a href="scan.html" class="btn btn-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:8px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>Scan Food Now</a>
     </div></div>
   </section>
+  </main>
 
   <footer class="site-footer">
     <div class="container footer-content">
       <div class="footer-top">
-        <a href="index.html" class="logo"><img src="logo.png" class="logo-mark-img" alt="BiteLens Logo" width="28" height="28" /><span>BiteLens</span></a>
+        <a href="index.html" class="logo"><picture><source type="image/webp" srcset="logo.webp" /><img src="logo.png" class="logo-mark-img" alt="BiteLens Logo" width="28" height="28" decoding="async" /></picture><span>BiteLens</span></a>
         <div class="footer-links">
           <a href="index.html">Home</a>
           <a href="scan.html">Scan Food</a>
@@ -411,262 +442,282 @@
     </div>
   </footer>
 
-  <script src="bg3d.js"></script>
-  <script src="lenis.min.js"></script>
-  <script src="common.js?v=4.3"></script>
+  <script defer src="bg3d.js"></script>
+  <script defer src="lenis.min.js"></script>
+  <script defer src="common.js?v=4.4"></script>
   <script>
-    NB.mountChrome("home");
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.NB) NB.mountChrome("home");
 
-    /* FAQ accordion (single-open collapsible, matching screenshot) */
-    document.querySelectorAll(".faq-trigger").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const item = btn.closest(".faq-item");
-        const isOpen = item.classList.contains("open");
-        document.querySelectorAll(".faq-item").forEach((el) => {
-          el.classList.remove("open");
-          el.querySelector(".faq-trigger")?.setAttribute("aria-expanded", "false");
-        });
-        if (!isOpen) {
-          item.classList.add("open");
-          btn.setAttribute("aria-expanded", "true");
-        }
-      });
-    });
-
-    /* Scroll reveal: fade and lift blocks smoothly into view */
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("in");
-        }
-      });
-    }, { threshold: 0.14, rootMargin: "0px 0px -40px 0px" });
-    document.querySelectorAll(".reveal, .reveal-card").forEach((el) => revealObserver.observe(el));
-
-    /* Gentle parallax drift on the big feature images (skipped for reduced motion) */
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const pxEls = Array.from(document.querySelectorAll("[data-parallax]"));
-    if (!reduceMotion && pxEls.length) {
-      let ticking = false;
-      const move = () => {
-        ticking = false;
-        const vh = window.innerHeight || 800;
-        pxEls.forEach((el) => {
-          const r = el.getBoundingClientRect();
-          const off = (r.top + r.height / 2 - vh / 2) / vh;   /* -~0.7 … +~0.7 */
-          const amt = parseFloat(el.dataset.parallax) || 24;  /* max px drift  */
-          el.style.transform = "translate3d(0," + (-off * amt).toFixed(1) + "px,0)";
-        });
-      };
-      const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(move); } };
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll);
-      window.lenis?.on("scroll", onScroll);
-      move();
-    }
-
-    /* TrueFocus Component from React Bits */
-    (function initTrueFocus() {
-      const container = document.getElementById("trueFocus");
-      const frame = document.getElementById("focusFrame");
-      if (!container || !frame) return;
-
-      const words = Array.from(container.querySelectorAll(".focus-word"));
-      if (!words.length) return;
-
-      const blurAmount = 5;
-      const animationDuration = 0.5;
-      const pauseBetweenAnimations = 1;
-      let currentIndex = 0;
-      let autoTimer = null;
-      let isHovered = false;
-
-      function updateFocus(index) {
-        if (index < 0 || index >= words.length) return;
-        currentIndex = index;
-
-        words.forEach((w, i) => {
-          if (i === currentIndex) {
-            w.classList.add("active");
-            w.style.filter = "blur(0px)";
-          } else {
-            w.classList.remove("active");
-            w.style.filter = `blur(${blurAmount}px)`;
+      /* FAQ accordion (single-open collapsible, matching screenshot) */
+      document.querySelectorAll(".faq-trigger").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const item = btn.closest(".faq-item");
+          const isOpen = item.classList.contains("open");
+          document.querySelectorAll(".faq-item").forEach((el) => {
+            el.classList.remove("open");
+            el.querySelector(".faq-trigger")?.setAttribute("aria-expanded", "false");
+          });
+          if (!isOpen) {
+            item.classList.add("open");
+            btn.setAttribute("aria-expanded", "true");
           }
         });
-
-        const activeWord = words[currentIndex];
-        const parentRect = container.getBoundingClientRect();
-        const activeRect = activeWord.getBoundingClientRect();
-
-        const x = activeRect.left - parentRect.left;
-        const y = activeRect.top - parentRect.top;
-        const width = activeRect.width;
-        const height = activeRect.height;
-
-        frame.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        frame.style.width = `${width}px`;
-        frame.style.height = `${height}px`;
-        frame.style.opacity = "1";
-      }
-
-      function startAuto() {
-        stopAuto();
-        autoTimer = setInterval(() => {
-          if (isHovered) return;
-          const next = (currentIndex + 1) % words.length;
-          updateFocus(next);
-        }, (animationDuration + pauseBetweenAnimations) * 1000);
-      }
-
-      function stopAuto() {
-        if (autoTimer) {
-          clearInterval(autoTimer);
-          autoTimer = null;
-        }
-      }
-
-      words.forEach((w, i) => {
-        w.addEventListener("mouseenter", () => {
-          isHovered = true;
-          updateFocus(i);
-        });
-        w.addEventListener("mouseleave", () => {
-          isHovered = false;
-        });
       });
 
-      // Initial focus once rendered
-      requestAnimationFrame(() => {
-        updateFocus(0);
-        startAuto();
-      });
-
-      window.addEventListener("resize", () => updateFocus(currentIndex));
-      if (document.fonts) {
-        document.fonts.ready.then(() => updateFocus(currentIndex));
-      }
-    })();
-
-    /* ScrollStack Component (React Bits) */
-    (function initScrollStack() {
-      const root = document.getElementById("showcaseScrollStack");
-      const inner = document.getElementById("scrollStackInner");
-      const end = document.getElementById("scrollStackEnd");
-      if (!root || !inner || !end) return;
-
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-      const getSettings = () => {
-        const isMobile = window.innerWidth <= 860;
-        return {
-          itemDistance: isMobile ? 60 : 100,
-          itemStackDistance: isMobile ? 16 : 24,
-          stackPosition: isMobile ? 74 : 96,
-          itemScale: 0.045,
-          baseScale: 0.88,
-          dimAmount: 0.18,
-          holdDistance: isMobile ? 140 : 220
-        };
-      };
-
-      let settings = getSettings();
-      let frame = 0;
-      const cache = new Map();
-      const write = (key, value, apply) => {
-        if (cache.get(key) === value) return false;
-        cache.set(key, value);
-        apply(value);
-        return true;
-      };
-
-      const update = () => {
-        frame = 0;
-        const slots = Array.from(inner.children).filter((c) => c.hasAttribute("data-stack-slot"));
-        if (!slots.length) return;
-
-        const stackTop = settings.stackPosition;
-        const offset = settings.itemStackDistance;
-        const heights = slots.map((s) => s.offsetHeight);
-        const tops = slots.map((s) => s.getBoundingClientRect().top);
-
-        const depths = slots.map(() => 0);
-        for (let j = 1; j < slots.length; j++) {
-          const pinBefore = stackTop + (j - 1) * offset;
-          const start = pinBefore + heights[j - 1];
-          const span = Math.max(1, start - pinBefore - offset);
-          const cover = Math.min(1, Math.max(0, (start - tops[j]) / span));
-          for (let i = 0; i < j; i++) depths[i] += cover;
-        }
-
-        const dimStep = Math.min(Math.max(settings.dimAmount, 0), 1);
-        slots.forEach((slot, i) => {
-          const card = slot.querySelector(".scroll-stack-card");
-          if (!card) return;
-          const depth = depths[i];
-          const scale = Math.max(settings.baseScale, 1 - depth * settings.itemScale);
-          const dim = 1 - Math.pow(1 - dimStep, depth);
-          const transform = depth < 0.0005 ? "" : `perspective(1200px) scale(${scale.toFixed(4)})`;
-
-          write(`transform${i}`, transform, (v) => { card.style.transform = v; });
-          write(`dim${i}`, dim.toFixed(3), (v) => { card.style.setProperty("--scroll-stack-dim", v); });
+      /* Scroll reveal: fade and lift blocks smoothly into view */
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+          }
         });
-      };
+      }, { threshold: 0.14, rootMargin: "0px 0px -40px 0px" });
+      document.querySelectorAll(".reveal, .reveal-card").forEach((el) => revealObserver.observe(el));
 
-      const schedule = () => {
-        if (!frame) frame = requestAnimationFrame(update);
-      };
-
-      window.addEventListener("scroll", schedule, { passive: true });
-      window.lenis?.on("scroll", schedule);
-      window.addEventListener("resize", () => {
-        settings = getSettings();
-        schedule();
-      });
-      schedule();
-    })();
-
-    /* Staggered Text Component (React Bits Pro) */
-    (function initStaggeredText() {
-      const elements = document.querySelectorAll(".staggered-text");
-      if (!elements.length) return;
-
+      /* Gentle parallax drift on the big feature images (skipped for reduced motion) */
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const pxEls = Array.from(document.querySelectorAll("[data-parallax]"));
+      if (!reduceMotion && pxEls.length) {
+        let ticking = false;
+        const visiblePx = new Set();
+        const pxObserver = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) visiblePx.add(e.target);
+            else visiblePx.delete(e.target);
+          });
+        }, { rootMargin: "60px 0px" });
+        pxEls.forEach((el) => pxObserver.observe(el));
 
-      elements.forEach((container) => {
-        const segments = container.querySelectorAll(".stagger-segment");
-        if (reduceMotion) {
-          container.classList.add("in");
-          return;
-        }
+        const move = () => {
+          ticking = false;
+          if (!visiblePx.size) return;
+          const vh = window.innerHeight || 800;
+          visiblePx.forEach((el) => {
+            const r = el.getBoundingClientRect();
+            const off = (r.top + r.height / 2 - vh / 2) / vh;
+            const amt = parseFloat(el.dataset.parallax) || 24;
+            el.style.transform = "translate3d(0," + (-off * amt).toFixed(1) + "px,0)";
+          });
+        };
+        const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(move); } };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+        window.lenis?.on("scroll", onScroll);
+        move();
+      }
 
-        const delay = parseFloat(container.dataset.staggerDelay || "0.08");
-        segments.forEach((seg, i) => {
-          if (!seg.style.getPropertyValue("--stagger-delay")) {
-            seg.style.setProperty("--stagger-delay", `${(i * delay).toFixed(2)}s`);
-          }
-        });
+      /* TrueFocus Component from React Bits */
+      (function initTrueFocus() {
+        const container = document.getElementById("trueFocus");
+        const frame = document.getElementById("focusFrame");
+        if (!container || !frame) return;
 
-        const threshold = parseFloat(container.dataset.staggerThreshold || "0.15");
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              container.classList.add("in");
-              observer.unobserve(container);
+        const words = Array.from(container.querySelectorAll(".focus-word"));
+        if (!words.length) return;
+
+        const blurAmount = 5;
+        const animationDuration = 0.5;
+        const pauseBetweenAnimations = 1;
+        let currentIndex = 0;
+        let autoTimer = null;
+        let isHovered = false;
+
+        function updateFocus(index) {
+          if (index < 0 || index >= words.length) return;
+          currentIndex = index;
+
+          words.forEach((w, i) => {
+            if (i === currentIndex) {
+              w.classList.add("active");
+              w.style.filter = "blur(0px)";
+            } else {
+              w.classList.remove("active");
+              w.style.filter = `blur(${blurAmount}px)`;
             }
           });
-        }, { threshold, rootMargin: "0px 0px -40px 0px" });
 
-        observer.observe(container);
-      });
-    })();
+          const activeWord = words[currentIndex];
+          const parentRect = container.getBoundingClientRect();
+          const activeRect = activeWord.getBoundingClientRect();
 
-    /* CountUp Component (React Bits) */
-    (function initCountUp() {
-      if (window.CountUp && window.CountUp.init) {
-        window.CountUp.init();
-      }
-    })();
+          const x = activeRect.left - parentRect.left;
+          const y = activeRect.top - parentRect.top;
+          const width = activeRect.width;
+          const height = activeRect.height;
+
+          frame.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          frame.style.width = `${width}px`;
+          frame.style.height = `${height}px`;
+          frame.style.opacity = "1";
+        }
+
+        function startAuto() {
+          stopAuto();
+          autoTimer = setInterval(() => {
+            if (isHovered) return;
+            const next = (currentIndex + 1) % words.length;
+            updateFocus(next);
+          }, (animationDuration + pauseBetweenAnimations) * 1000);
+        }
+
+        function stopAuto() {
+          if (autoTimer) {
+            clearInterval(autoTimer);
+            autoTimer = null;
+          }
+        }
+
+        words.forEach((w, i) => {
+          w.addEventListener("mouseenter", () => {
+            isHovered = true;
+            updateFocus(i);
+          });
+          w.addEventListener("mouseleave", () => {
+            isHovered = false;
+          });
+        });
+
+        // Initial focus once rendered
+        requestAnimationFrame(() => {
+          updateFocus(0);
+          startAuto();
+        });
+
+        window.addEventListener("resize", () => updateFocus(currentIndex));
+        if (document.fonts) {
+          document.fonts.ready.then(() => updateFocus(currentIndex));
+        }
+      })();
+
+      /* ScrollStack Component (React Bits) */
+      (function initScrollStack() {
+        const root = document.getElementById("showcaseScrollStack");
+        const inner = document.getElementById("scrollStackInner");
+        const end = document.getElementById("scrollStackEnd");
+        if (!root || !inner || !end) return;
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        const getSettings = () => {
+          const isMobile = window.innerWidth <= 860;
+          return {
+            itemDistance: isMobile ? 60 : 100,
+            itemStackDistance: isMobile ? 16 : 24,
+            stackPosition: isMobile ? 74 : 96,
+            itemScale: 0.045,
+            baseScale: 0.88,
+            dimAmount: 0.18,
+            holdDistance: isMobile ? 140 : 220
+          };
+        };
+
+        let settings = getSettings();
+        let frame = 0;
+        const cache = new Map();
+        const write = (key, value, apply) => {
+          if (cache.get(key) === value) return false;
+          cache.set(key, value);
+          apply(value);
+          return true;
+        };
+
+        let isStackVisible = false;
+        const stackObs = new IntersectionObserver(([e]) => {
+          isStackVisible = e.isIntersecting;
+          if (isStackVisible) schedule();
+        }, { rootMargin: "120px 0px" });
+        stackObs.observe(root);
+
+        let cachedHeights = [];
+        const measureHeights = () => {
+          const slots = Array.from(inner.children).filter((c) => c.hasAttribute("data-stack-slot"));
+          cachedHeights = slots.map((s) => s.offsetHeight);
+        };
+        measureHeights();
+
+        const update = () => {
+          frame = 0;
+          if (!isStackVisible) return;
+          const slots = Array.from(inner.children).filter((c) => c.hasAttribute("data-stack-slot"));
+          if (!slots.length) return;
+
+          const stackTop = settings.stackPosition;
+          const offset = settings.itemStackDistance;
+          const tops = slots.map((s) => s.getBoundingClientRect().top);
+
+          const depths = slots.map(() => 0);
+          for (let j = 1; j < slots.length; j++) {
+            const pinBefore = stackTop + (j - 1) * offset;
+            const start = pinBefore + (cachedHeights[j - 1] || 400);
+            const span = Math.max(1, start - pinBefore - offset);
+            const cover = Math.min(1, Math.max(0, (start - tops[j]) / span));
+            for (let i = 0; i < j; i++) depths[i] += cover;
+          }
+
+          const dimStep = Math.min(Math.max(settings.dimAmount, 0), 1);
+          slots.forEach((slot, i) => {
+            const card = slot.querySelector(".scroll-stack-card");
+            if (!card) return;
+            const depth = depths[i];
+            const scale = Math.max(settings.baseScale, 1 - depth * settings.itemScale);
+            const dim = 1 - Math.pow(1 - dimStep, depth);
+            const transform = depth < 0.0005 ? "" : `perspective(1200px) scale(${scale.toFixed(4)})`;
+
+            write(`transform${i}`, transform, (v) => { card.style.transform = v; });
+            write(`dim${i}`, dim.toFixed(3), (v) => { card.style.setProperty("--scroll-stack-dim", v); });
+          });
+        };
+
+        const schedule = () => {
+          if (!frame) frame = requestAnimationFrame(update);
+        };
+
+        window.addEventListener("scroll", schedule, { passive: true });
+        window.lenis?.on("scroll", schedule);
+        window.addEventListener("resize", () => {
+          settings = getSettings();
+          measureHeights();
+          schedule();
+        });
+        schedule();
+      })();
+
+      /* Staggered Text Component (React Bits Pro) */
+      (function initStaggeredText() {
+        const elements = document.querySelectorAll(".staggered-text");
+        if (!elements.length) return;
+
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        elements.forEach((container) => {
+          const segments = container.querySelectorAll(".stagger-segment");
+          if (reduceMotion) {
+            container.classList.add("in");
+            return;
+          }
+
+          const delay = parseFloat(container.dataset.staggerDelay || "0.08");
+          segments.forEach((seg, i) => {
+            if (!seg.style.getPropertyValue("--stagger-delay")) {
+              seg.style.setProperty("--stagger-delay", `${(i * delay).toFixed(2)}s`);
+            }
+          });
+
+          const threshold = parseFloat(container.dataset.staggerThreshold || "0.15");
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                container.classList.add("in");
+                observer.unobserve(container);
+              }
+            });
+          }, { threshold, rootMargin: "0px 0px -40px 0px" });
+
+          observer.observe(container);
+        });
+      })();
+    });
   </script>
 </body>
 </html>

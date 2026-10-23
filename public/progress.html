@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJD7M4GXQS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJD7M4GXQS');
+  </script>
   <title>Your Daily Calorie Intake — BiteLens Progress Tracker</title>
   <meta name="description" content="Track your daily calorie intake, view goal rings, and monitor weekly nutrition habits with BiteLens." />
   <link rel="canonical" href="https://nutribite-cvg1.onrender.com/progress.html" />
@@ -14,12 +22,16 @@
   <!-- TODO: update after domain migration -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&family=Urbanist:wght@400;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&family=Urbanist:wght@400;600;700;800&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&family=Urbanist:wght@400;600;700;800&display=swap" />
+  </noscript>
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
   <link rel="shortcut icon" href="favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-  <link rel="stylesheet" href="styles.css?v=4.3" />
+  <link rel="stylesheet" href="styles.css?v=4.4" />
   <script>
     try {
       var t = localStorage.getItem('bitelens_theme');
@@ -29,8 +41,9 @@
   </script>
 </head>
 <body class="page-bg">
+  <a href="#main" class="skip-link">Skip to main content</a>
   <div id="chrome"></div>
-  <main class="container page">
+  <main class="container page" id="main">
     <div class="page-head">
       <h1>Your daily calorie intake</h1>
       <p>Every scan is added to the day you ate it — Day 1, Day 2, Day 3 and on.</p>
@@ -39,7 +52,7 @@
     <div class="sum-grid" id="summary"></div>
 
     <div class="panel">
-      <h3 style="font-size:1.2rem;letter-spacing:-.02em;margin-bottom:6px">Last 7 days</h3>
+      <h2 style="font-size:1.2rem;letter-spacing:-.02em;margin-bottom:6px">Last 7 days</h2>
       <div class="chart" id="chart"></div>
     </div>
 
@@ -53,9 +66,13 @@
     <div class="days" id="days"></div>
   </main>
 
-  <script src="lenis.min.js"></script>
-  <script src="common.js?v=4.3"></script>
-  <script>NB.mountChrome("progress");</script>
-  <script src="progress.js?v=3.8"></script>
+  <script defer src="lenis.min.js"></script>
+  <script defer src="common.js?v=4.4"></script>
+  <script defer src="progress.js?v=3.8"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.NB) NB.mountChrome("progress");
+    });
+  </script>
 </body>
 </html>

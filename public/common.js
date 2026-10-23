@@ -231,7 +231,7 @@ const NB = (() => {
     host.innerHTML = `
       <div class="powered-bar"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:5px;display:inline-block"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><b>Powered by AI</b> to detect the calories &amp; nutrients of the food in your hands</div>
       <div class="nav-wrap"><nav class="nav" id="nav">
-        <a href="index.html" class="logo"><img src="logo.png" class="logo-mark-img" alt="BiteLens Logo" width="30" height="30" /><span>BiteLens</span></a>
+        <a href="index.html" class="logo"><picture><source type="image/webp" srcset="logo.webp" /><img src="logo.png" class="logo-mark-img" alt="BiteLens Logo" width="30" height="30" decoding="async" /></picture><span>BiteLens</span></a>
         <div class="nav-links" id="navLinks">
           <span class="nav-glider" id="navGlider" aria-hidden="true"></span>
           ${link("index.html", "home", iconHome, "Home")}
@@ -320,25 +320,34 @@ const NB = (() => {
     }, { threshold: 0.15 });
     obs.observe(el);
 
-    // Scroll skew physics matching silent-hostels
-    let e = window.scrollY, i = 0, a = false;
+    // Scroll skew physics matching silent-hostels (pauses when idle)
+    let e = window.scrollY, i = 0, a = false, rAF = null;
     const o = () => {
+      rAF = null;
       if (!a) return;
       const t = window.scrollY;
       i += (t - e - i) * 0.12;
       e = t;
       const s = Math.max(-8, Math.min(8, -i * 0.35));
       if (inner) inner.style.transform = `skewX(${s}deg)`;
-      requestAnimationFrame(o);
+      if (Math.abs(s) > 0.04 || Math.abs(t - e) > 0.5) {
+        rAF = requestAnimationFrame(o);
+      }
     };
 
+    const onScroll = () => {
+      if (a && !rAF) rAF = requestAnimationFrame(o);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     const s = new IntersectionObserver(([t]) => {
-      if (t.isIntersecting && !a) {
+      if (t.isIntersecting) {
         a = true;
         e = window.scrollY;
-        requestAnimationFrame(o);
-      } else if (!t.isIntersecting) {
+        if (!rAF) rAF = requestAnimationFrame(o);
+      } else {
         a = false;
+        if (rAF) { cancelAnimationFrame(rAF); rAF = null; }
       }
     });
     s.observe(footer);

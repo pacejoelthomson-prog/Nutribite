@@ -3,7 +3,7 @@
   --bg: #ffffff;
   --soft: #f5f6f7;
   --ink: #0c0d10;
-  --muted: #6b7280;
+  --muted: #596375;
   --line: #e7e9ec;
   --mint: #bff3d6;
   --mint-2: #d9fbe8;
@@ -30,6 +30,22 @@ html.dark {
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 [hidden] { display: none !important; }
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  z-index: 9999;
+  font-weight: 700;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 16px;
+}
 /* Lenis Smooth Scroll (matching silent-hostels.vercel.app) */
 html.lenis,
 html.lenis body {
@@ -353,6 +369,7 @@ html.dark .theme-moon {
   background: #22c55e;
   box-shadow: 0 0 8px #22c55e;
   animation: live-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: transform, opacity;
 }
 @keyframes live-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
@@ -376,19 +393,19 @@ html.dark .theme-moon {
 }
 .phone::before { content: ""; position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 92px; height: 24px; border-radius: 99px; background: #000; z-index: 3; }
 .screen { background: #fff; color: #0c0d10; border-radius: 36px 36px 0 0; height: 100%; padding: 46px 18px 0; overflow: hidden; }
-.screen h6 { font-size: .8rem; color: #6b7280; font-weight: 600; }
+.screen h6, .screen .screen-title { font-size: .8rem; color: #4b5361; font-weight: 600; margin-bottom: 2px; }
 .screen .big { font-size: 1.7rem; font-weight: 800; letter-spacing: -.03em; display: flex; align-items: baseline; gap: 6px; color: #0c0d10; }
-.screen .big small { font-size: .8rem; color: var(--green); font-weight: 700; }
+.screen .big small { font-size: .8rem; color: #15803d; font-weight: 700; }
 .screen svg.chart { width: 100%; height: 100px; margin: 8px 0 4px; }
 .screen .list-title { font-weight: 800; font-size: .9rem; margin: 10px 0 8px; color: #0c0d10; }
 .tx { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: .82rem; }
 .tx .ic { width: 34px; height: 34px; border-radius: 50%; background: var(--soft); display: grid; place-items: center; }
 .tx strong { display: block; font-size: .85rem; color: #0c0d10; }
-.tx small { color: #6b7280; font-size: .7rem; }
+.tx small { color: #596375; font-size: .7rem; }
 .tx .amt { margin-left: auto; font-weight: 800; color: var(--red); }
 .fcard {
   position: absolute; background: #fff; border-radius: 16px; padding: 12px 16px; box-shadow: var(--shadow); font-size: .78rem; color: var(--muted);
-  animation: bob 5s ease-in-out infinite; z-index: 4;
+  animation: bob 5s ease-in-out infinite; z-index: 4; will-change: transform;
 }
 .fcard strong { display: block; color: var(--ink); font-size: 1.15rem; letter-spacing: -.02em; }
 .fcard.a { top: 180px; right: -28px; }
@@ -510,17 +527,27 @@ section { padding: 90px 0; }
   box-shadow: 0 4px 14px -6px rgba(22, 163, 74, 0.25);
 }
 .showcase-pill .pill-dot {
+  position: relative;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--green-2);
-  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-  animation: pulse-dot 2s infinite;
+}
+.showcase-pill .pill-dot::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background: var(--green-2);
+  opacity: 0.7;
+  animation: pulse-dot 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 @keyframes pulse-dot {
-  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-  70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  0% { transform: scale(1); opacity: 0.7; }
+  70% { transform: scale(2.6); opacity: 0; }
+  100% { transform: scale(2.6); opacity: 0; }
 }
 .sec-subtitle {
   color: #4b5361;
@@ -1196,6 +1223,7 @@ html.js .scroll-stack-card.in .showcase-visual {
   transition-delay: calc(var(--i) * 70ms);
   display: inline-block;
   transform: translateY(105%);
+  will-change: transform;
 }
 .kword.is-in .ch {
   transform: none;
@@ -1209,6 +1237,7 @@ html.js .scroll-stack-card.in .showcase-visual {
 }
 .kword.is-live .ch--dot {
   animation: 3.6s cubic-bezier(0.3, 0, 0.3, 1) infinite dotBounce;
+  will-change: transform;
 }
 
 @keyframes breathe {
@@ -1222,19 +1251,19 @@ html.js .scroll-stack-card.in .showcase-visual {
 
 @keyframes dotBounce {
   0%, 62%, to {
-    translate: 0;
+    transform: translateY(0);
   }
   72% {
-    translate: 0 -26%;
+    transform: translateY(-26%);
   }
   82% {
-    translate: 0;
+    transform: translateY(0);
   }
   88% {
-    translate: 0 -8%;
+    transform: translateY(-8%);
   }
   94% {
-    translate: 0;
+    transform: translateY(0);
   }
 }
 
@@ -2097,7 +2126,8 @@ html.dark .screen {
   background: #090d16;
   color: #f1f5f9;
 }
-html.dark .screen h6 {
+html.dark .screen h6,
+html.dark .screen .screen-title {
   color: #94a3b8;
 }
 html.dark .screen .big {

@@ -2,6 +2,7 @@
 // Renders an interactive 3D spatial field with perspective-projected scanner rings,
 // nutrient nodes, and smooth mouse/touch parallax. Pure vanilla canvas, 60fps, zero bloat.
 (() => {
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const canvas = document.getElementById("bg3d");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
@@ -10,7 +11,7 @@
   let width = 0, height = 0, dpr = 1;
   let targetRotX = 0, targetRotY = 0;
   let rotX = 0, rotY = 0;
-  let isVisible = true;
+  let isVisible = false;
   let animId = null;
 
   function resize() {
@@ -38,7 +39,8 @@
   window.addEventListener("touchmove", onMove, { passive: true });
 
   // 3D Spatial Particles (Nutrient & Energy Nodes)
-  const NODE_COUNT = 45;
+  const isMobile = (window.innerWidth || 800) < 768;
+  const NODE_COUNT = isMobile ? 22 : 45;
   const nodes = [];
   for (let i = 0; i < NODE_COUNT; i++) {
     nodes.push({
@@ -202,6 +204,4 @@
     else if (!isVisible && animId) { cancelAnimationFrame(animId); animId = null; }
   }, { threshold: 0.05 });
   obs.observe(canvas);
-
-  animId = requestAnimationFrame(render);
 })();
