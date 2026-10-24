@@ -1237,7 +1237,7 @@ html.js .scroll-stack-card.in .showcase-visual {
 }
 .kword.is-live .ch--dot {
   animation: 3.6s cubic-bezier(0.3, 0, 0.3, 1) infinite dotBounce;
-  will-change: transform;
+  will-change: translate;
 }
 
 @keyframes breathe {
@@ -1251,19 +1251,19 @@ html.js .scroll-stack-card.in .showcase-visual {
 
 @keyframes dotBounce {
   0%, 62%, to {
-    transform: translateY(0);
+    translate: 0;
   }
   72% {
-    transform: translateY(-26%);
+    translate: 0 -26%;
   }
   82% {
-    transform: translateY(0);
+    translate: 0;
   }
   88% {
-    transform: translateY(-8%);
+    translate: 0 -8%;
   }
   94% {
-    transform: translateY(0);
+    translate: 0;
   }
 }
 

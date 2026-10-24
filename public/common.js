@@ -320,34 +320,25 @@ const NB = (() => {
     }, { threshold: 0.15 });
     obs.observe(el);
 
-    // Scroll skew physics matching silent-hostels (pauses when idle)
-    let e = window.scrollY, i = 0, a = false, rAF = null;
+    // Scroll skew physics matching silent-hostels
+    let e = window.scrollY, i = 0, a = false;
     const o = () => {
-      rAF = null;
       if (!a) return;
       const t = window.scrollY;
       i += (t - e - i) * 0.12;
       e = t;
       const s = Math.max(-8, Math.min(8, -i * 0.35));
       if (inner) inner.style.transform = `skewX(${s}deg)`;
-      if (Math.abs(s) > 0.04 || Math.abs(t - e) > 0.5) {
-        rAF = requestAnimationFrame(o);
-      }
+      requestAnimationFrame(o);
     };
-
-    const onScroll = () => {
-      if (a && !rAF) rAF = requestAnimationFrame(o);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
 
     const s = new IntersectionObserver(([t]) => {
-      if (t.isIntersecting) {
+      if (t.isIntersecting && !a) {
         a = true;
         e = window.scrollY;
-        if (!rAF) rAF = requestAnimationFrame(o);
-      } else {
+        requestAnimationFrame(o);
+      } else if (!t.isIntersecting) {
         a = false;
-        if (rAF) { cancelAnimationFrame(rAF); rAF = null; }
       }
     });
     s.observe(footer);
@@ -388,7 +379,8 @@ const NB = (() => {
   }
 
   document.documentElement.classList.add('js');
-  document.addEventListener("DOMContentLoaded", () => {
+
+  const onReady = () => {
     initLenis();
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
     document.querySelectorAll(".reveal, .reveal-card").forEach((el) => io.observe(el));
@@ -404,7 +396,13 @@ const NB = (() => {
         }
       });
     });
-  });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", onReady);
+  } else {
+    onReady();
+  }
 
   return { currentDay, dayOf, dateOfDay, fmtDate, fmtTime, getLog, addEntry, deleteEntry, clearAll, dayTotals, activeDays, getGoal, setGoal, saveResult, loadResult, ring, setRing, countUp, toast, esc, mountChrome, applyRatioMode, getTheme, setTheme: applyTheme, toggleTheme, initKword, initLenis, lenis: () => lenisInstance };
 })();
